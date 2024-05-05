@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.manychat import bp
-from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response
+from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response, ResponseContent
 
 
 
@@ -35,7 +35,8 @@ def find_specialist():
         messages.append(message)
     
     print('messages: ', messages)
-    response = Response(msg_type='telegram', messages=messages)
+    response_content = ResponseContent(msg_type='telegram', messages=messages).to_json()
+    response = Response(response_content)
     print('\n\n----------------/n')
     print('response: ', response)
     return response.to_json()

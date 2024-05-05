@@ -42,6 +42,18 @@ class ManychatRequest():
 class Response:
     version = 'v2'
 
+    def __init__(self, content):
+        self.content = content
+
+
+    def to_json(self):
+        return {
+            'version': self.version,
+            'content': self.content
+        }
+    
+
+class ResponseContent:
     def __init__(self, msg_type, messages=None):
         self.type = msg_type
         self.messages = [] if messages is None else messages

@@ -33,5 +33,4 @@ def create_app(config_class=Config):
     from app.manychat import bp as manychat_bp
     app.register_blueprint(manychat_bp)
 
-    
-    return app
+    return app  

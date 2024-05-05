@@ -10,4 +10,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
     LOG_LEVEL = logging.DEBUG
-    SERVER_URL = 'https://ziabrov.pythonanywhere.com/woman_war/'
+    SERVER_URL = 'https://ziabrov.pythonanywhere.com/'

@@ -1,5 +1,6 @@
 from app.extensions import db
 from app.tags.models import Tag
+from app.specialists.forms import NewSpecialistForm
 
 
 specialist_tag = db.Table(
@@ -16,9 +17,47 @@ class Specialist(db.Model):
     image = db.Column(db.String(255))
     description = db.Column(db.String(255))
     cv = db.Column(db.String(255))
+    phone = db.Column(db.String(255))
     tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
 
 
     @classmethod
     def find_by_tag(cls, tag):
         return cls.query.filter(Specialist.tags.any(id=tag.id)).all()
+    
+
+    @classmethod
+    def get_by_phone(cls, phone):
+        return cls.query.filter_by(phone=phone).first()
+    
+
+    @classmethod
+    def add(cls, form: NewSpecialistForm):
+        new_specialist = cls(
+            name = form.name_input.data,
+            image = form.image_input.data,
+            description = form.description_input.data,
+            cv = form.cv_input.data,
+            id = form.id_input.data,
+            tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data]
+        )
+        db.session.add(new_specialist)
+        db.session.commit()
+        return new_specialist
+    
+
+    def edit(self, form: NewSpecialistForm):
+        self.name = form.name_input.data
+        self.image = form.image_input.data
+        self.description = form.description_input.data
+        self.cv = form.cv_input.data
+        self.id = form.id_input.data
+        self.tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data]
+        db.session.commit()
+
+
+    def delete(self):
+        db.session.delete(self)
+
+    
+

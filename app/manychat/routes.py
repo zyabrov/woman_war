@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.manychat import bp
-from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response, ResponseContent
+from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response, ResponseContent, SendContent
 
 
 
@@ -8,26 +8,22 @@ from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Respons
 def find_specialist():
     manychat_request = ManychatRequest(request)
     from app.specialists.models import Specialist
-    from app.tags.models import Tag
-    tag = Tag.get_by_name(manychat_request.tag)
-    print('tag', tag)
-    specialists = Specialist.find_by_tag(tag)
     from app.requests.models import Request
     from app.users.models import User
-    user = User.get_or_create(manychat_request.user_id, manychat_request.full_name)
+    user = User.get_and_update_or_create_from_request(manychat_request)
     print('/n/n----------------/n')
     print('user: ', manychat_request.user_id)
-    print('tag: ', tag)
-    new_request = Request.add(manychat_request.id, user.id, tag.id)
+    new_request = Request.add_from_request(manychat_request)
     print('request: ', new_request)
 
     messages = []
     server_url = 'http://127.0.0.1:5000'
+    specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
     if specialists:
         print('specialists: ', specialists)
         for specialist in specialists:
-            btn1 = UrlButton('ℹ️ Інфо', f"{server_url}/manychat/specialists/{specialist.id}')")
-            btn2 = UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{specialist.id}')")
+            btn1 = UrlButton('ℹ️ Інфо', f"{server_url}/manychat/specialists/{new_request.id}/{specialist.id}')")
+            btn2 = UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{new_request.id}/{specialist.id}')")
             message = TextMessage(f'{specialist.name}', buttons=[btn1, btn2])
             messages.append(message)
     else:
@@ -42,9 +38,8 @@ def find_specialist():
     return response.to_json()
 
 
-@bp.route('/specialists/<int:specialist_id>', methods=['POST'])
-def choose_specialist(specialist_id):
-    manychat_request = ManychatRequest(request)
+@bp.route('/specialists/<int:request_id>/<int:specialist_id>', methods=['POST'])
+def choose_specialist(request_id, specialist_id):
     from app.specialists.models import Specialist
     specialist = Specialist.query.get(specialist_id)
     messages = []
@@ -54,25 +49,35 @@ def choose_specialist(specialist_id):
             TextMessage(
                 f"{specialist.name}/n{specialist.description}",
                 [
-                    UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{specialist.id}')").to_json()
+                    UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{request_id}/{specialist.id}')").to_json()
                     ]
             ).to_json()
         )
-    return Response(
-        type='telegram',
-        messages=messages
-    ).to_json()
+        
+    response_content = ResponseContent(msg_type='telegram', messages=messages).to_json()
+    response = Response(response_content)
+    return response.to_json()
 
 
-@bp.route('/specialists/choose/<int:specialist_id>', methods=['POST'])
-def choose_request(specialist_id):
-    manychat_request = ManychatRequest(request)
+@bp.route('/specialists/choose/<int:request_id>/<int:specialist_id>', methods=['POST'])
+def choose_request(request_id, specialist_id):
+    
     from app.specialists.models import Specialist
     specialist = Specialist.query.get(specialist_id)
     if specialist:
         from app.requests.models import Request
-        request = Request.query.get(manychat_request.id)
-        request.add_specialist(specialist)
-        return {"status": 200, "specialist": {"name": specialist.name, "id": specialist.id}}
+        request = Request.query.get(request_id)
+        request.add_specialist(specialist.id)
+        
+        #message to the specialist
+        specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}').to_json
+        specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message]).to_json()
+        SendContent(specialist.id, specialist_content, 'ACCOUNT_UPDATE', 'New Request').post()
+        
+        #message to the user
+        user_message = TextMessage('Ваш запит надісланий спеціалісту').to_json
+        user_content = ResponseContent(msg_type='telegram', messages=[user_message]).to_json
+        SendContent(request.user.id, user_content, 'ACCOUNT_UPDATE', 'Request has been sent').post()
+        return {"status": 200, 'message': {"specialist": {"name": specialist.name, "id": specialist.id}}}
     else:
-        return '404'
+        return {'status': 404, 'message': {'Спеціаліста не знайдено'}}

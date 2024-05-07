@@ -1,36 +1,45 @@
 from flask import request    
+import requests
+
 
 
 class ManychatRequest():
-    
     request = None
     user_id = None
     full_name = None
     username = None
     telegram_id = None
-    tag = None
+    tag_name = None
     id = None
+    birthdate = None
+    where_is = None
+    where_is_city = None
+    worked_with_psychologist_before = None
+    help_type = None
+    how_known = None
+    phone = None
+    
     
     def __init__(self, request):
         self.request = request.get_json()
         self.user_id = self.request['id']
         self.username = self.request['custom_fields']['запит_telegram_username']
         self.telegram_id = self.request['custom_fields']['запит_telegram_id']
-        self.full_name = self.request['name']
-        self.tag = self.request['custom_fields']['запит_запит']
+        self.full_name = self.request['custom_fields']["опитування_ім'я"]
+        self.tag_name = self.request['custom_fields']['запит_запит']
         self.id = self.request['custom_fields']['request_id']
+        self.birthdate = self.request['custom_fields']['опитування_дата_народження']
+        self.where_is = self.request['custom_fields']['Опитування_де_знаходиться']
+        self.where_is_city = self.request['custom_fields']['опитування_місто']
+        self.worked_with_psychologist_before = self.request['custom_fields']['запит_досвід_з_психологом']
+        self.help_type = self.request['custom_fields']['опитування_яку_допомогу']
+        self.how_known = self.request['custom_fields']['запит_як_дізналися']
+        self.phone = self.request['phone']
         print('ManychatRequest', self.request)
-
-    def get_user(self):
-        from app.users.models import User
-        user = User.get_user_from_manychat(self.user_id)
-        if not user:
-            user = User.add_user(self.full_name, self.username, self.telegram_id, self.user_id)
-        return user
     
     def get_request_tag(self):
         from app.tags.models import Tag
-        return Tag.get_by_name(self.tag)
+        return Tag.get_by_name(self.tag_name)
     
 
     def get_specialist(self):
@@ -97,3 +106,33 @@ class UrlButton:
             'caption': self.caption,
             'url': self.url
         }
+
+
+
+
+
+class SendContent():
+    url = 'https://api.manychat.com/fb/sending/sendContent'
+    API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
+    headers = {
+        'Authorization': 'Bearer ' + API_TOKEN,
+        'Content-Type': 'application/json'
+    }
+
+    def __init__(self, subscriber_id, data: ResponseContent, message_tag, otn_topic_name):
+        self.subscriber_id = subscriber_id
+        self.data = data
+        self.message_tag = message_tag
+        self.otn_topic_name = otn_topic_name
+        
+    
+    def to_json(self):
+        return {
+            'subscriber_id': self.subscriber_id,
+            'data': self.data,
+            'message_tag': self.message_tag,
+            'otn_topic_name': self.otn_topic_name
+        }
+    
+    def post(self):
+        requests.post(self.url, json=self.to_json(), headers=self.headers)

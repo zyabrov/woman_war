@@ -9,5 +9,15 @@ class Tag(db.Model):
     @classmethod
     def get_by_name(cls, name):
         print('tag name', name)
-        print('tag name', name.split(" - ")[1])
-        return cls.query.filter_by(name=name.split(" - ")[1]).first()
+        tag_name = name
+        if " - " in name:
+            tag_name = name.split(" - ")[1]
+        return cls.query.filter_by(name=tag_name).first()
+
+
+    @classmethod
+    def add(cls, name):
+        new_tag = cls(name=name)
+        db.session.add(new_tag)
+        db.session.commit()
+        return new_tag

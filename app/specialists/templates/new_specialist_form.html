@@ -1,0 +1,34 @@
+<form method="POST" action="{{ url_for('specialists.new_specialist') }}">
+    {{ form.csrf_token }}
+    {{ form.name_input.label }} {{ form.name_input }}
+    {% if form.name_input.errors %}
+        {{ form.name_input.errors }}
+    {% endif %}
+
+    {{ form.id_input.label }} {{ form.id_input }}
+    {% if form.id_input.errors %}
+        {{ form.id_input.errors }}
+    {% endif %}
+
+    {{ form.description_input.label }} {{ form.description_input }}
+    {% if form.description_input.errors %}
+        {{ form.description_input.errors }}
+    {% endif %}
+
+    {{ form.image_input.label }} {{ form.image_input }}
+    {% if form.image_input.errors %}
+        {{ form.image_input.errors }}
+    {% endif %}
+
+    {{ form.cv_input.label }} {{ form.cv_input }}
+    {% if form.cv_input.errors %}
+        {{ form.cv_input.errors }}
+    {% endif %}
+
+    {{ form.tags_select.label }} {{ form.tags_select }}
+    {% if form.tags_select.errors %}
+        {{ form.tags_select.errors }}
+    {% endif %}
+
+    {{ form.submit() }}
+</form>

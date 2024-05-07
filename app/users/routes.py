@@ -23,3 +23,10 @@ def new_user_test():
     if user:
         return 'user_created: {}'.format(user)
     return 'user_not_created'
+
+
+@bp.route('/<int:user_id>', methods=['GET', 'POST'])
+def user_card(user_id):
+    user = User.get(user_id)
+    if user:
+        return render_template('user_card.html', user=user)

@@ -1,0 +1,50 @@
+<table id="requests">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Created Date</th>
+            <th>Tag</th>
+            <th>User</th>
+            <th>Specialist</th>
+            <th>User Full Name</th>
+            <th>User Username</th>
+            <th>User Telegram ID</th>
+            <th>User Birthdate</th>
+            <th>User Age</th>
+            <th>User Where Is</th>
+            <th>User Where Is City</th>
+            <th>User Worked With Psychologist Before</th>
+            <th>Help Type</th>
+            <th>User How Known</th>
+            <th>User Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <td>
+            <td>{{ request.id }}</td>
+            <td>{{ request.created_date }}</td>
+            <td>{{ request.tag }}</td>
+            <td><a href="{{ url_for('users.user_card', user_id=request.user_id) }}">{{ request.user }}</a></td>
+            <td>
+                {% if request.specialist %}
+                <a href="{{ url_for('specialists.specialist_card', specialist_id=request.specialist_id) }}">{{ request.specialist }}</a>
+                {% else %}
+                Спеціаліст не вибраний
+                {% endif %}
+            </td>
+            <td>{{ request.user_full_name }}</td>
+            <td>{{ request.user_username }}</td>
+            <td>{{ request.user_telegram_id }}</td>
+            <td>{{ request.user_birthdate }}</td>
+            <td>{{ request.user.age }}</td>
+            <td>{{ request.user_where_is }}</td>
+            <td>{{ request.user_where_is_city }}</td>
+            <td>{{ request.user_worked_with_psychologist_before }}</td>
+            <td>{{ request.help_type }}</td>
+            <td>{{ request.user_how_known }}</td>
+            <td>{{ request.user_phone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

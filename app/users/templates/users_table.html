@@ -1,0 +1,40 @@
+<table id="users">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Telegram ID</th>
+            <th>Birthdate</th>
+            <th>Where is</th>
+            <th>Where is City</th>
+            <th>Worked with psychologist before</th>
+            <th>Phone</th>
+            <th>How known</th>
+            <th>Age</th>
+            <th>Requests</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.telegram_id }}</td>
+            <td>{{ user.birthdate }}</td>
+            <td>{{ user.where_is }}</td>
+            <td>{{ user.where_is_city }}</td>
+            <td>{{ user.worked_with_psychologist_before }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.how_known }}</td>
+            <td>{{ user.age }}</td>
+            <td>
+                {% for request in user.requests %}
+                <a href="{{ url_for('requests.request_card', request_id=request.id) }}">{{ request }}</a>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

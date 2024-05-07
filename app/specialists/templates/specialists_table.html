@@ -1,0 +1,54 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>CV</th>
+            <th>Phone</th>
+            <th>Tags</th>
+            <th>Requests</th>
+            <th>Users</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for specialist in specialists %}
+        <tr>
+            <td>{{ specialist.id }}</td>
+            <td>{{ specialist.name }}</td>
+            <td>{{ specialist.image }}</td>
+            <td>{{ specialist.description }}</td>
+            <td>{{ specialist.cv }}</td>
+            <td>{{ specialist.phone }}</td>
+            <td>
+                {% for tag in specialist.tags %}
+                {{ tag.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>{% if specialist.requests %}
+                    {% for request in specialist.requests %}
+                        <a href="{{ url_for('requests.request_card', request_id=request.id) }}">{{ request.id }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Немає запитів
+                {% endif %}
+            </td>
+            <td>
+                {% if specialist.requests %}
+                    {% for request in specialist.requests %}
+                            <a href="{{ url_for('users.user_card', user_id=request.user.id) }}">{{ request.user.id }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Немає користувачів
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('specialists.edit_specialist', specialist_id=specialist.id) }}">Edit</a>
+                <a href="{{ url_for('specialists.delete_specialist', specialist_id=specialist.id) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

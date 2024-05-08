@@ -22,8 +22,8 @@ def find_specialist():
     if specialists:
         print('specialists: ', specialists)
         for specialist in specialists:
-            btn1 = UrlButton('ℹ️ Інфо', f"{server_url}/manychat/specialists/{new_request.id}/{specialist.id}')")
-            btn2 = UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{new_request.id}/{specialist.id}')")
+            btn1 = UrlButton(caption='ℹ️ Інфо', url=f"{server_url}/manychat/specialists/{new_request.id}/{specialist.id}")
+            btn2 = UrlButton(caption='✅ Обрати', url=f"{server_url}/manychat/specialists/choose/{new_request.id}/{specialist.id}")
             message = TextMessage(f'{specialist.name}', buttons=[btn1, btn2])
             messages.append(message)
     else:
@@ -49,7 +49,7 @@ def choose_specialist(request_id, specialist_id):
             TextMessage(
                 f"{specialist.name}/n{specialist.description}",
                 [
-                    UrlButton('✅ Обрати', f"{server_url}/manychat/specialists/choose/{request_id}/{specialist.id}')").to_json()
+                    UrlButton(caption='✅ Обрати', url=f"{server_url}/manychat/specialists/choose/{request_id}/{specialist.id}").to_json()
                     ]
             ).to_json()
         )
@@ -68,7 +68,7 @@ def choose_request(request_id, specialist_id):
         from app.requests.models import Request
         request = Request.query.get(request_id)
         request.add_specialist(specialist.id)
-        
+
         #message to the specialist
         specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}').to_json
         specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message]).to_json()

@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.manychat import bp
-from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response, ResponseContent, SendContent
+from app.manychat.models import ManychatRequest, TextMessage, UrlButton, Response, ResponseContent, SendContent, ImageMessage
 
 
 
@@ -22,10 +22,11 @@ def find_specialist():
     if specialists:
         print('specialists: ', specialists)
         for specialist in specialists:
-            btn1 = UrlButton(caption='ℹ️ Інфо', url=f"{server_url}/manychat/specialists/{new_request.id}/{specialist.id}")
+            btn1 = UrlButton(caption='ℹ️ Резюме', url=f"{specialist.cv}")
             btn2 = UrlButton(caption='✅ Обрати', url=f"{server_url}/manychat/specialists/choose/{new_request.id}/{specialist.id}")
-            message = TextMessage(f'{specialist.name}', buttons=[btn1, btn2])
-            messages.append(message)
+            text_message = TextMessage(f'<b>{specialist.name}</b>/n{specialist.description}', buttons=[btn1, btn2])
+            image_message = ImageMessage(specialist.image)
+            messages.append(image_message.to_json(), text_message.to_json())
     else:
         message = TextMessage('Спеціалістів не знайдено')
         messages.append(message)

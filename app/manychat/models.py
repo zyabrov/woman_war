@@ -74,7 +74,17 @@ class ResponseContent:
             'messages': [message.to_json() for message in self.messages]
         }
 
+class ImageMessage:
+    def __init__(self, image_url):
+        self.type = 'image'
+        self.url = image_url
 
+    
+    def to_json(self):
+        return {
+            'type': self.type,
+            'url': self.url
+        }
 
 
 class TextMessage:

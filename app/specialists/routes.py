@@ -65,15 +65,17 @@ def choose(request_id, specialist_id):
 
     #message to the user
     from app.manychat.models import TextMessage, ResponseContent, SendContent
-    user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}').to_json
-    user_content = ResponseContent(msg_type='telegram', messages=[user_message]).to_json
-    SendContent(request.user.id, user_content, 'ACCOUNT_UPDATE', 'Request has been sent').post()
-    
+    user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
+    user_content = ResponseContent(msg_type='telegram', messages=[user_message.to_json()])
+    send_content = SendContent(request.user.id, user_content.to_json(), 'ACCOUNT_UPDATE', 'Request has been sent')
+    send_content.post()
+
     #message to the specialist
     from app.manychat.models import TextMessage, ResponseContent, SendContent
-    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}').to_json
-    specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message]).to_json()
-    SendContent(specialist.id, specialist_content, 'ACCOUNT_UPDATE', 'New Request').post()
-
+    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}')
+    specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message.to_json()])
+    send_content = SendContent(specialist.id, specialist_content.to_json(), 'ACCOUNT_UPDATE', 'New Request').post()
+    send_content.post()
+    
     return 'Запит надіслано спеціалісту'
     

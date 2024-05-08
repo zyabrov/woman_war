@@ -129,7 +129,7 @@ class SendContent():
         'Content-Type': 'application/json'
     }
 
-    def __init__(self, subscriber_id, data: ResponseContent, message_tag, otn_topic_name):
+    def __init__(self, subscriber_id, data, message_tag, otn_topic_name):
         self.subscriber_id = subscriber_id
         self.data = data
         self.message_tag = message_tag
@@ -147,3 +147,5 @@ class SendContent():
     def post(self):
         r = requests.post(self.url, json=self.to_json(), headers=self.headers)
         r.raise_for_status()
+        print(r.json())
+        

@@ -71,7 +71,7 @@ class ResponseContent:
     def to_json(self):
         return {
             'type': self.type,
-            'messages': [message.to_json() for message in self.messages]
+            'messages': self.messages
         }
 
 class ImageMessage:

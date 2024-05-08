@@ -13,15 +13,6 @@
 
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('requests.requests') }}">Запити</a></li>            
-            <li><a href="{{ url_for('specialists.specialists') }}">Спеціалісти</a></li>
-            <li><a href="{{ url_for('users.users') }}">Користувачі</a></li>
-            <li><a href="{{ url_for('tags.tags') }}">Теги</a></li>
-        </ul>
-    </nav>
-    <hr>
     <div class="content">
         {% block content %} {% endblock %}
     </div>

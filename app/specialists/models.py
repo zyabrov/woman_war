@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.tags.models import Tag
 from app.specialists.forms import NewSpecialistForm
+from app.requests.models import Request
 
 
 specialist_tag = db.Table(
@@ -58,6 +59,13 @@ class Specialist(db.Model):
 
     def delete(self):
         db.session.delete(self)
+
+
+    @classmethod
+    def find_by_request_id(cls, request_id):
+        request = Request.query.get(request_id)
+        request_tag = request.tag
+        return cls.query.filter(Specialist.tags.any(id=request_tag.id)).all()
 
     
 

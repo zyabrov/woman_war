@@ -24,7 +24,7 @@ def find_specialist():
         for specialist in specialists:
             btn1 = UrlButton(caption='ℹ️ Резюме', url=f"{specialist.cv}")
             btn2 = UrlButton(caption='✅ Обрати', url=f"{server_url}/manychat/specialists/choose/{new_request.id}/{specialist.id}")
-            text_message = TextMessage(f'<b>{specialist.name}</b>/n{specialist.description}', buttons=[btn1, btn2])
+            text_message = TextMessage(f'{specialist.name}\n\n{specialist.description}', buttons=[btn1, btn2])
             image_message = ImageMessage(specialist.image)
             messages.append(image_message.to_json())
             messages.append(text_message.to_json())

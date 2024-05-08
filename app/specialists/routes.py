@@ -45,3 +45,35 @@ def delete_specialist(specialist_id):
     if specialist:
         specialist.delete()
         return render_template('specialists.html', specialists=Specialist.query.all())
+
+
+
+@bp.route('/find_request/<int:request_id>', methods=['GET'])
+def find_request(request_id):
+    specialists = Specialist.find_by_request_id(request_id)
+    return render_template('specialists_cards.html', specialists=specialists, request_id=request_id)
+
+
+@bp.route('/choose/<int:request_id>/<int:specialist_id>', methods=['GET'])
+def choose(request_id, specialist_id):
+    specialist = Specialist.query.get(specialist_id)
+    
+    #update request
+    from app.requests.models import Request
+    request = Request.query.get(request_id)
+    request.add_specialist(specialist_id)
+
+    #message to the user
+    from app.manychat.models import TextMessage, ResponseContent, SendContent
+    user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}').to_json
+    user_content = ResponseContent(msg_type='telegram', messages=[user_message]).to_json
+    SendContent(request.user.id, user_content, 'ACCOUNT_UPDATE', 'Request has been sent').post()
+    
+    #message to the specialist
+    from app.manychat.models import TextMessage, ResponseContent, SendContent
+    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}').to_json
+    specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message]).to_json()
+    SendContent(specialist.id, specialist_content, 'ACCOUNT_UPDATE', 'New Request').post()
+
+    return 'Запит надіслано спеціалісту'
+    

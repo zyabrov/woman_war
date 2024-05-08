@@ -145,4 +145,5 @@ class SendContent():
         }
     
     def post(self):
-        requests.post(self.url, json=self.to_json(), headers=self.headers)
+        r = requests.post(self.url, json=self.to_json(), headers=self.headers)
+        r.raise_for_status()

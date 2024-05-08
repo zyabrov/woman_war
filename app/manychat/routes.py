@@ -72,10 +72,10 @@ def choose_request(request_id, specialist_id):
         request.add_specialist(specialist.id)
 
         #message to the specialist
-        specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}').to_json
-        specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message]).to_json()
-        SendContent(specialist.id, specialist_content, 'ACCOUNT_UPDATE', 'New Request').post()
-        
+        specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}')
+        specialist_content = ResponseContent(msg_type='telegram', messages=[specialist_message])
+        send_content = SendContent(specialist.id, specialist_content.to_json(), 'ACCOUNT_UPDATE', 'New Request')
+        send_content.post()
         #message to the user
         user_message = TextMessage('Ваш запит надісланий спеціалісту').to_json
         user_content = ResponseContent(msg_type='telegram', messages=[user_message]).to_json

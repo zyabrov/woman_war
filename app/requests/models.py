@@ -7,12 +7,12 @@ class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_date = db.Column(db.DateTime, nullable=False)
     user_full_name = db.Column(db.String(80), nullable=False)
-    user_username = db.Column(db.String(80), nullable=False)
-    user_telegram_id = db.Column(db.Integer, nullable=False)
+    user_username = db.Column(db.String(80))
+    user_telegram_id = db.Column(db.Integer)
     user_birthdate = db.Column(db.Date, nullable=False)
     user_where_is = db.Column(db.String(80), nullable=False)
     user_where_is_city = db.Column(db.String(80), nullable=False)
-    user_worked_with_psychologist_before = db.Column(db.Boolean, nullable=False)
+    user_worked_with_psychologist_before = db.Column(db.String(80), nullable=False)
     help_type = db.Column(db.String(80), nullable=False)
     user_how_known = db.Column(db.String(80), nullable=False)
     user_phone = db.Column(db.Integer, nullable=False)
@@ -42,7 +42,7 @@ class Request(db.Model):
             user_full_name = user_full_name,
             user_username = user_username,
             user_telegram_id = user_telegram_id,
-            user_birthdate = user_birthdate,
+            user_birthdate = datetime.strptime(user_birthdate, "%Y-%m-%d").date(), #user_birthdate,
             user_where_is = user_where_is,
             user_where_is_city = user_where_is_city,
             user_worked_with_psychologist_before = user_worked_with_psychologist_before,

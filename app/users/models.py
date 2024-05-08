@@ -6,12 +6,12 @@ from datetime import datetime
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    telegram_id = db.Column(db.Integer, unique=True, nullable=False)
+    username = db.Column(db.String(80), unique=True)
+    telegram_id = db.Column(db.Integer, unique=True)
     birthdate = db.Column(db.Date, nullable=False)
     where_is = db.Column(db.String(80), nullable=False)
     where_is_city = db.Column(db.String(80), nullable=False)
-    worked_with_psychologist_before = db.Column(db.Boolean, nullable=False)
+    worked_with_psychologist_before = db.Column(db.String(80), nullable=False)
     phone = db.Column(db.String(80), nullable=False)
     how_known = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer)
@@ -35,6 +35,7 @@ class User(db.Model):
     
     @classmethod
     def add_user(cls, id, name, username, telegram_id, birthdate:str, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
+        birthdate = datetime.strptime(birthdate, "%Y-%m-%d")
         age = age_calc(birthdate)
         user = cls(id, name, username, telegram_id, birthdate, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age)
         db.session.add(user)
@@ -85,14 +86,15 @@ class User(db.Model):
                 name=request.full_name,
                 username=request.username,
                 where_is=request.where_is,
-                where_id_city = request.where_is_city,
+                where_is_city = request.where_is_city,
                 worked_with_psychologist_before=request.worked_with_psychologist_before,
                 phone=request.phone)
         return user
     
 
-def age_calc(birthdate):
-    birthdate_obj = datetime.strptime(birthdate, "%Y-%m-%d")
-    age = datetime.now().year - birthdate_obj.year - ((datetime.now().month, datetime.now().day) < (birthdate_obj.month, birthdate_obj.day))
+def age_calc(birthdate:datetime):
+    age = datetime.now().year - birthdate.year - ((datetime.now().month, datetime.now().day) < (birthdate.month, birthdate.day))
+    print('/n/n----------------/n')
+    print('age: ', age)
     return age
         

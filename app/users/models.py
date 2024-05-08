@@ -34,8 +34,9 @@ class User(db.Model):
         return '<%r>' % self.name
     
     @classmethod
-    def add_user(cls, id, name, username, telegram_id, birthdate:datetime, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
-        user = cls(id, name, username, telegram_id, birthdate, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age=datetime.now().year - birthdate.year)
+    def add_user(cls, id, name, username, telegram_id, birthdate:str, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
+        age = age_calc(birthdate)
+        user = cls(id, name, username, telegram_id, birthdate, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age)
         db.session.add(user)
         db.session.commit()
         return user
@@ -88,4 +89,10 @@ class User(db.Model):
                 worked_with_psychologist_before=request.worked_with_psychologist_before,
                 phone=request.phone)
         return user
+    
+
+def age_calc(birthdate):
+    birthdate_obj = datetime.strptime(birthdate, "%Y-%m-%d")
+    age = datetime.now().year - birthdate_obj.year - ((datetime.now().month, datetime.now().day) < (birthdate_obj.month, birthdate_obj.day))
+    return age
         

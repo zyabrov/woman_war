@@ -18,7 +18,7 @@ def find_specialists():
     from app.users.models import User
     User.get_and_update_or_create_from_request(manychat_request)
     
-    new_request = Request.add_from_request(manychat_request)
+    Request.add_from_request(manychat_request)
 
     from app.specialists.models import Specialist
     specialists = Specialist.find_by_tag(manychat_request.get_request_tag())

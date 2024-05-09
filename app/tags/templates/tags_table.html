@@ -1,8 +1,22 @@
 <table id="tags">
+    <tr>
+        <th>ID</th>
+        <th>Назва</th>
+        <th>Спеціалісти</th>
+    </tr>
     {% for tag in tags %}
     <tr>
         <td>{{ tag.id }}</td>
         <td>{{ tag.name }}</td>
+        <td>
+            {% if tag.specialists %}
+                {% for specialist in tag.specialists %}
+                    <a href="{{ url_for('specialists.specialist_card', specialist_id=specialist.id) }}">{{ specialist }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                Немає спеціалістів
+            {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>

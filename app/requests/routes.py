@@ -1,8 +1,7 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, redirect, url_for, request
 from app.requests import bp
 from app.requests.models import Request
 
-server_url = 'http://127.0.0.1:5000'
 
 @bp.route("/", methods=["GET", "POST"])
 def requests():
@@ -64,4 +63,12 @@ def specialist_choose(request_id, specialist_id):
 def request_card(request_id):
     request = Request.query.get(request_id)
     return render_template('request_card.html', request=request)
+
+
+
+@bp.route('/delete_request/<int:request_id>', methods=['GET', 'POST'])
+def delete_request(request_id):
+    request = Request.query.get(request_id)
+    request.delete()
+    return redirect(url_for('requests.requests'))
 

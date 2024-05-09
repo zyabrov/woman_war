@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, redirect, url_for, request
 from app.specialists import bp
 from app.specialists.models import Specialist
 from app.specialists.forms import NewSpecialistForm
@@ -44,7 +44,7 @@ def delete_specialist(specialist_id):
     specialist = Specialist.query.get(specialist_id)
     if specialist:
         specialist.delete()
-        return render_template('specialists.html', specialists=Specialist.query.all())
+        return redirect(url_for('specialists.specialists'))
 
 
 

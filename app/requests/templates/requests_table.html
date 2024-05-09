@@ -17,6 +17,7 @@
             <th>Help Type</th>
             <th>User How Known</th>
             <th>User Phone</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +45,9 @@
             <td>{{ request.help_type }}</td>
             <td>{{ request.user_how_known }}</td>
             <td>{{ request.user_phone }}</td>
+            <td>
+                <a href="{{ url_for('requests.delete_request', request_id=request.id) }}">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

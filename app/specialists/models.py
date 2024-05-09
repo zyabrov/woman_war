@@ -15,12 +15,14 @@ class Specialist(db.Model):
     __tablename__ = "specialist"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    image = db.Column(db.String(255))
     description = db.Column(db.String(255))
     cv = db.Column(db.String(255))
     phone = db.Column(db.String(255))
     tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
 
+
+    def __repr__(self) -> str:
+        return f"{self.name}"
 
     @classmethod
     def find_by_tag(cls, tag):
@@ -36,7 +38,6 @@ class Specialist(db.Model):
     def add(cls, form: NewSpecialistForm):
         new_specialist = cls(
             name = form.name_input.data,
-            image = form.image_input.data,
             description = form.description_input.data,
             cv = form.cv_input.data,
             id = form.id_input.data,
@@ -49,7 +50,6 @@ class Specialist(db.Model):
 
     def edit(self, form: NewSpecialistForm):
         self.name = form.name_input.data
-        self.image = form.image_input.data
         self.description = form.description_input.data
         self.cv = form.cv_input.data
         self.id = form.id_input.data
@@ -59,6 +59,7 @@ class Specialist(db.Model):
 
     def delete(self):
         db.session.delete(self)
+        db.session.commit()
 
 
     @classmethod

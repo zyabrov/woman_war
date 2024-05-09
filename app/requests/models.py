@@ -89,4 +89,9 @@ class Request(db.Model):
     def get_user(self):
         from app.users.models import User
         return User.query.get(self.user_id)
+    
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
         

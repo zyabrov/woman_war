@@ -6,7 +6,7 @@ from app.users.models import User
 
 @bp.route('/')
 def users():
-    return render_template('users.html')
+    return render_template('users.html', users=User.query.all())
 
 
 @bp.route('/new', methods=['GET', 'POST'])

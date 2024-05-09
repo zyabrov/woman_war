@@ -6,6 +6,9 @@ class Tag(db.Model):
     name = db.Column(db.String(255), unique=True, nullable=False)
     specialists = db.relationship("Specialist", secondary="specialist_tag", back_populates="tags")
     
+    def __repr__(self) -> str:
+        return f"{self.name}"
+
     @classmethod
     def get_by_name(cls, name):
         print('tag name', name)

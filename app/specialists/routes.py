@@ -71,9 +71,9 @@ def choose(request_id, specialist_id):
 
     #message to the specialist
     from app.manychat.models import TextMessage, ManychatSendMessage
-    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту:\n{request.tag}\n\nІнформація запиту:\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}')
+    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту\n\nТег запиту: {request.tag}\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}')
     send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
     send_message.post()
-    
+
     return 'Запит надіслано спеціалісту'
     

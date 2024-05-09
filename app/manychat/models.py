@@ -60,8 +60,6 @@ class TextMessage:
             'text': self.text,
             'buttons': [self.buttons] if self.buttons else []
         }
-        print('/n/n----------------/n')
-        print('message: ', message)
         return message
 
 
@@ -97,8 +95,6 @@ class ManychatSendMessage():
             },
             'message_tag': self.message_tag
         }
-        print('/n/n----------------/n')
-        print('json: ', json)
         return json
     
 

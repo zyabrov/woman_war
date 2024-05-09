@@ -9,6 +9,13 @@ def requests():
     return render_template("requests.html", requests = Request.query.all())
 
 
+@bp.route('/free', methods=['POST'])
+def free_request():
+    from app.manychat.models import ManychatRequest
+    manychat_request = ManychatRequest(request)
+    Request.add_from_request(manychat_request, 'free')
+    return {'status': '200'}
+
 
 @bp.route('/find_specialists', methods=['POST'])
 def find_specialists():
@@ -18,15 +25,15 @@ def find_specialists():
     from app.users.models import User
     User.get_and_update_or_create_from_request(manychat_request)
     
-    Request.add_from_request(manychat_request)
+    Request.add_from_request(manychat_request, 'paid')
 
     from app.specialists.models import Specialist
     specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
 
     if specialists:
-        return {'status': '200'}
+        return {'status': '200', 'specialists': len(specialists)}
     else:
-        return {'status': '404'}
+        return {'status': '404', 'specialists': 0}
 
 
 @bp.route('/choose/<int:request_id>/<int:specialist_id>', methods=['GET'])
@@ -51,3 +58,10 @@ def specialist_choose(request_id, specialist_id):
         return 'Запит надіслано спеціалісту'
     else:
         return 'Спеціаліста не знайдено'
+
+
+@bp.route('/request_card/<int:request_id>', methods=['GET'])
+def request_card(request_id):
+    request = Request.query.get(request_id)
+    return render_template('request_card.html', request=request)
+

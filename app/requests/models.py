@@ -16,7 +16,7 @@ class Request(db.Model):
     help_type = db.Column(db.String(80), nullable=False)
     user_how_known = db.Column(db.String(80), nullable=False)
     user_phone = db.Column(db.Integer, nullable=False)
-    
+    request_type = db.Column(db.String(80), nullable=False)
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=False)
     tag = db.relationship("Tag", backref="requests")
     
@@ -30,12 +30,12 @@ class Request(db.Model):
 
 
     def __repr__(self):
-        return f"<Request {self.id}>"
+        return f"Запит {self.id}"
     
 
 
     @classmethod
-    def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone):
+    def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone, request_type):
         new_request = cls(
             id = id,
             created_date = datetime.now(),
@@ -50,7 +50,8 @@ class Request(db.Model):
             user_how_known = user_how_known,
             user_phone = user_phone,
             tag_id = tag_id,
-            user_id = user_id
+            user_id = user_id,
+            request_type = request_type
         )
         db.session.add(new_request)
         db.session.commit()
@@ -58,7 +59,7 @@ class Request(db.Model):
 
 
     @classmethod
-    def add_from_request(cls, request: ManychatRequest):
+    def add_from_request(cls, request: ManychatRequest, request_type):
         from app.tags.models import Tag
         return cls.add(
             id = request.id,
@@ -73,7 +74,8 @@ class Request(db.Model):
             user_worked_with_psychologist_before = request.worked_with_psychologist_before,
             help_type = request.help_type,
             user_how_known = request.how_known,
-            user_phone = request.phone
+            user_phone = request.phone,
+            request_type = request_type
         )
 
 

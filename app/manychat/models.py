@@ -47,6 +47,66 @@ class ManychatRequest():
         return Specialist.find_by_tag(self.get_request_tag())
     
 
+class TextMessage:
+    def __init__(self, text, buttons=None):
+        self.type = 'text'
+        self.text = text
+        self.buttons = [] if buttons is None else list(buttons)
+        self.json = self.to_json()
+
+    def to_json(self):
+        message = {
+            'type': self.type,
+            'text': self.text,
+            'buttons': [self.buttons] if self.buttons else []
+        }
+        print('/n/n----------------/n')
+        print('message: ', message)
+        return message
+
+
+
+
+class ManychatSendMessage():
+    url = 'https://api.manychat.com/fb/sending/sendContent'
+    API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
+    headers = {
+        'Authorization': 'Bearer ' + API_TOKEN,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+    version = 'v2'
+    content_type = 'telegram'
+    message_tag = 'ACCOUNT_UPDATE'
+
+    def __init__(self, subscriber_id, messages):
+        self.subscriber_id = subscriber_id
+        self.messages = messages
+        self.json = self.to_json()
+
+    def to_json(self):
+        json = {
+            'subscriber_id': self.subscriber_id,
+            'data': {
+                'version': self.version,
+                'content': {
+                    'type': self.content_type,
+                    'version': self.version,
+                    'messages': self.messages
+                }
+            },
+            'message_tag': self.message_tag
+        }
+        print('/n/n----------------/n')
+        print('json: ', json)
+        return json
+    
+
+    def post(self):
+        r = requests.post(self.url, json=self.json, headers=self.headers)
+        r.raise_for_status()
+        print(r.json())
+
 
 class Response:
     version = 'v2'
@@ -87,19 +147,6 @@ class ImageMessage:
         }
 
 
-class TextMessage:
-    def __init__(self, text, buttons=None):
-        self.type = 'text'
-        self.text = text
-        self.buttons = [] if buttons is None else list(buttons)
-
-
-    def to_json(self):
-        return {
-            'type': self.type,
-            'text': self.text,
-            'buttons': [button.to_json() for button in self.buttons]
-        }
 
 
 
@@ -148,4 +195,4 @@ class SendContent():
         r = requests.post(self.url, json=self.to_json(), headers=self.headers)
         r.raise_for_status()
         print(r.json())
-        
+

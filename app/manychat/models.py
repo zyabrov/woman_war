@@ -20,6 +20,7 @@ class ManychatRequest():
         self.how_known = self.request['custom_fields']['запит_як_дізналися']
         self.phone = self.request['phone']
         self.group_name = self.request['custom_fields'].get('запит_група', None)
+        self.request_type = self.request['custom_fields']['тип_запиту']
         print('ManychatRequest', self.request)
     
     def get_request_tag(self):

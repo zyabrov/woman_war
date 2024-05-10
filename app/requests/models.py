@@ -59,7 +59,7 @@ class Request(db.Model):
 
 
     @classmethod
-    def add_from_request(cls, request: ManychatRequest, request_type):
+    def add_from_request(cls, request: ManychatRequest):
         from app.tags.models import Tag
         return cls.add(
             id = request.id,
@@ -75,7 +75,7 @@ class Request(db.Model):
             help_type = request.help_type,
             user_how_known = request.how_known,
             user_phone = request.phone,
-            request_type = request_type
+            request_type = request.request_type
         )
 
 

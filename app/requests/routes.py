@@ -12,7 +12,7 @@ def requests():
 def free_request():
     from app.manychat.models import ManychatRequest
     manychat_request = ManychatRequest(request)
-    request = Request.add_from_request(manychat_request, 'free')
+    request = Request.add_from_request(manychat_request)
     if request:
         return {'status': '200'}
     else:
@@ -23,7 +23,7 @@ def free_request():
 def free_request_group():
     from app.manychat.models import ManychatRequest
     manychat_request = ManychatRequest(request)
-    request = Request.add_from_request(manychat_request, 'group')
+    request = Request.add_from_request(manychat_request)
     if request:
         return {'status': '200'}
     else:
@@ -83,7 +83,7 @@ def find_specialists():
     from app.users.models import User
     User.get_and_update_or_create_from_request(manychat_request)
     
-    Request.add_from_request(manychat_request, 'paid')
+    Request.add_from_request(manychat_request)
 
     from app.specialists.models import Specialist
     specialists = Specialist.find_by_tag(manychat_request.get_request_tag())

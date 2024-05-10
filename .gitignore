@@ -1,0 +1,4 @@
+# .gitignore
+
+# Ignore app.db file
+app.db

@@ -1,35 +1,41 @@
 {% extends "base_without_nav.html" %}
 {% block content %}
 
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    {% for specialist in specialists %}
-    <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %}></li>
-    {% endfor %}
-  </ol>
-  <div class="carousel-inner">
-    {% for specialist in specialists %}
-      <div class="carousel-item {% if loop.first %}active{% endif %}">
-        <div class="card">
-          <img class="card-img-top" src="{{ url_for('static', filename='images/' ~ specialist.id ~ '.JPG') }}" alt="Specialist">
-          <div class="card-body">
-            <h5 class="card-title">{{ specialist.name }}</h5>
-            <div class="card-text">{{ specialist.description }}</div>
-            <a href="{{ specialist.cv }}" class="btn btn-info">ℹ️ Резюме</a>
-            <a href="{{ url_for('specialists.choose', request_id=request_id, specialist_id=specialist.id) }}" class="btn btn-success">✅ Обрати</a>
+<div class="content" id="specialists_cards">
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      {% for specialist in specialists %}
+      <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %}></li>
+      {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+      {% for specialist in specialists %}
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
+          <div class="card">
+            <img class="card-img-top" src="{{ url_for('static', filename='images/' ~ specialist.id ~ '.JPG') }}" alt="Specialist">
+            <div class="card-body">
+              <h5 class="card-title">{{ specialist.name }}</h5>
+              <div class="card-text">{{ specialist.description }}</div>
+              <div class="card_buttons">
+                <a href="{{ specialist.cv }}" class="btn btn-info">ℹ️ Резюме</a>
+                <a href="{{ url_for('specialists.choose', request_id=request_id, specialist_id=specialist.id) }}" class="btn btn-success">✅ Обрати</a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Попередній</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Наступний</span>
+    </a>
   </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Попередній</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Наступний</span>
-  </a>
+
 </div>
 
 {% endblock %}

@@ -78,7 +78,8 @@ def find_specialists():
     specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
 
     if specialists:
-        return {'status': '200', 'specialists': len(specialists)}
+        specialists_number = len(specialists)
+        return {'status': '200', 'specialists': specialists_number}
     else:
         return {'status': '404', 'specialists': 0}
 

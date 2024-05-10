@@ -2,22 +2,22 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Created Date</th>
-            <th>Tag</th>
-            <th>User</th>
-            <th>Specialist</th>
-            <th>User Full Name</th>
-            <th>User Username</th>
-            <th>User Telegram ID</th>
-            <th>User Birthdate</th>
-            <th>User Age</th>
-            <th>User Where Is</th>
-            <th>User Where Is City</th>
-            <th>User Worked With Psychologist Before</th>
-            <th>Help Type</th>
-            <th>User How Known</th>
-            <th>User Phone</th>
-            <th>Actions</th>
+            <th>Коли створений</th>
+            <th>Тег</th>
+            <th>Клієнт</th>
+            <th>Спеціаліст</th>
+            <th>Клієнт TG Username</th>
+            <th>Клієнт TG ID</th>
+            <th>Дата народження</th>
+            <th>Вік</th>
+            <th>Де знаходиться</th>
+            <th>Місто</th>
+            <th>Досвід з психологом</th>
+            <th>Яку допомогу</th>
+            <th>Як дізналися</th>
+            <th>Телефон</th>
+            <th>Тип запиту</th>
+            <th>Дії</th>
         </tr>
     </thead>
     <tbody>
@@ -34,7 +34,6 @@
                 Спеціаліст не вибраний
                 {% endif %}
             </td>
-            <td>{{ request.user_full_name }}</td>
             <td>{{ request.user_username }}</td>
             <td>{{ request.user_telegram_id }}</td>
             <td>{{ request.user_birthdate }}</td>
@@ -45,6 +44,7 @@
             <td>{{ request.help_type }}</td>
             <td>{{ request.user_how_known }}</td>
             <td>{{ request.user_phone }}</td>
+            <td>{{ request.request_type }}</td>
             <td>
                 <a href="{{ url_for('requests.delete_request', request_id=request.id) }}">Delete</a>
             </td>

@@ -7,8 +7,8 @@ class ManychatRequest():
     def __init__(self, request):
         self.request = request.get_json()
         self.user_id = self.request['id']
-        self.username = self.request['custom_fields']['запит_telegram_username']
-        self.telegram_id = self.request['custom_fields']['запит_telegram_id']
+        self.username = self.request['custom_fields']['telegram_username']
+        self.telegram_id = self.request['custom_fields']['telegram_id']
         self.full_name = self.request['custom_fields']["опитування_ім'я"]
         self.tag_name = self.request['custom_fields']['запит_запит']
         self.id = self.request['custom_fields']['request_id']

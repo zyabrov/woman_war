@@ -19,7 +19,6 @@ class Specialist(db.Model):
     cv = db.Column(db.String(255))
     phone = db.Column(db.String(255))
     tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
-    telegram_id = db.Column(db.Integer)
     telegram_username = db.Column(db.String(255))
 
 

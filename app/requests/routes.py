@@ -17,6 +17,17 @@ def free_request():
         return {'status': '200'}
     else:
         return {'status': '404'}
+
+
+@bp.route('/free/group', methods=['POST'])
+def free_request_group():
+    from app.manychat.models import ManychatRequest
+    manychat_request = ManychatRequest(request)
+    request = Request.add_from_request(manychat_request, 'group')
+    if request:
+        return {'status': '200'}
+    else:
+        return {'status': '404'}
     
 
 @bp.route('/accept/<int:request_id>', methods=['GET'])

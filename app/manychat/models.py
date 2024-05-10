@@ -3,23 +3,7 @@ import requests
 
 
 
-class ManychatRequest():
-    request = None
-    user_id = None
-    full_name = None
-    username = None
-    telegram_id = None
-    tag_name = None
-    id = None
-    birthdate = None
-    where_is = None
-    where_is_city = None
-    worked_with_psychologist_before = None
-    help_type = None
-    how_known = None
-    phone = None
-    
-    
+class ManychatRequest():    
     def __init__(self, request):
         self.request = request.get_json()
         self.user_id = self.request['id']
@@ -35,6 +19,7 @@ class ManychatRequest():
         self.help_type = self.request['custom_fields']['опитування_яку_допомогу']
         self.how_known = self.request['custom_fields']['запит_як_дізналися']
         self.phone = self.request['phone']
+        self.group_name = self.request['custom_fields'].get('запит_група', None)
         print('ManychatRequest', self.request)
     
     def get_request_tag(self):

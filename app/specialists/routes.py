@@ -60,18 +60,22 @@ def choose(request_id, specialist_id):
     
     #update request
     from app.requests.models import Request
-    request = Request.query.get(request_id)
-    request.add_specialist(specialist_id)
+    r = r.query.get(request_id)
+    r.add_specialist(specialist_id)
 
     #message to the user
     from app.manychat.models import TextMessage, ManychatSendMessage
     user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
-    send_message = ManychatSendMessage(request.user.id, messages=[user_message.json])
+    send_message = ManychatSendMessage(r.user.id, messages=[user_message.json])
     send_message.post()
 
     #message to the specialist
-    from app.manychat.models import TextMessage, ManychatSendMessage
-    specialist_message = TextMessage(f'{request.user.name} обрав вас для запиту\n\nТег запиту: {request.tag}\nВік: {request.user.age}\nДата народження: {request.user.birthdate}\nДе знаходиться: {request.user.where_is} - {request.user.where_is_city}\nПопереднй досвід з психологом: {request.user.worked_with_psychologist_before}\nТелефон: {request.user.phone}\nЯк дізналися: {request.user.how_known}')
+    from app.manychat.models import TextMessage, ManychatSendMessage, UrlButton
+    user_telegram_username = r.user.username
+    specialist_message_btn = None
+    if user_telegram_username:
+        specialist_message_btn = UrlButton(caption='Написати', url='https://t.me/')
+    specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn.json])
     send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
     send_message.post()
 

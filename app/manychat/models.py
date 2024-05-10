@@ -151,6 +151,7 @@ class UrlButton:
         self.type = 'url'
         self.caption = caption
         self.url = url
+        self.json = self.to_json()
 
 
     def to_json(self):

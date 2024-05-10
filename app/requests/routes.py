@@ -28,7 +28,7 @@ def accept_request(request_id):
     from app.specialists.models import Specialist
     specialist = Specialist.find_by_telegram_username(request.form['callback_query']['from']['username'])
     if specialist:
-        r = r.query.get(request_id)
+        r = Request.query.get(request_id)
         r.add_specialist(specialist.id)
 
         #edit the group message

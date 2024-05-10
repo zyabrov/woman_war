@@ -60,7 +60,7 @@ def choose(request_id, specialist_id):
     
     #update request
     from app.requests.models import Request
-    r = r.query.get(request_id)
+    r = Request.query.get(request_id)
     r.add_specialist(specialist_id)
 
     #message to the user

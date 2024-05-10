@@ -74,8 +74,8 @@ def choose(request_id, specialist_id):
     user_telegram_username = r.user.username
     specialist_message_btn = None
     if user_telegram_username:
-        specialist_message_btn = UrlButton(caption='Написати', url='https://t.me/')
-    specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn.json])
+        specialist_message_btn = UrlButton(caption='Написати', url='https://t.me/').json
+    specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn])
     send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
     send_message.post()
 

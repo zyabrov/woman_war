@@ -63,14 +63,13 @@ def choose(request_id, specialist_id):
     r = Request.query.get(request_id)
     r.add_specialist(specialist_id)
 
+    from app.manychat.models import TextMessage, ManychatSendMessage, UrlButton
     #message to the user
-    from app.manychat.models import TextMessage, ManychatSendMessage
     user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
     send_message = ManychatSendMessage(r.user.id, messages=[user_message.json])
     send_message.post()
 
     #message to the specialist
-    from app.manychat.models import TextMessage, ManychatSendMessage, UrlButton
     user_telegram_username = r.user.username
     specialist_message_btn = None
     if user_telegram_username:
@@ -78,6 +77,11 @@ def choose(request_id, specialist_id):
     specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn])
     send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
     send_message.post()
+
+    #message to the group
+    from app.telegram.models import SendMessage, paid_group_id
+    group_message = SendMessage(paid_group_id, f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name}')
+    group_message.post()
 
     return 'Запит надіслано спеціалісту'
     

@@ -49,16 +49,16 @@ class TextMessage:
         return message
 
 
+url = 'https://api.manychat.com/fb/sending/sendContent'
+API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
+headers = {
+    'Authorization': 'Bearer ' + API_TOKEN,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
 
 
 class ManychatSendMessage():
-    url = 'https://api.manychat.com/fb/sending/sendContent'
-    API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
-    headers = {
-        'Authorization': 'Bearer ' + API_TOKEN,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
     version = 'v2'
     content_type = 'telegram'
     message_tag = 'ACCOUNT_UPDATE'
@@ -85,7 +85,7 @@ class ManychatSendMessage():
     
 
     def post(self):
-        r = requests.post(self.url, json=self.json, headers=self.headers)
+        r = requests.post(url, json=self.json, headers=headers)
         r.raise_for_status()
         print(r.json())
 

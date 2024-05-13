@@ -33,4 +33,7 @@ def create_app(config_class=Config):
     from app.manychat import bp as manychat_bp
     app.register_blueprint(manychat_bp)
 
+    from app.telegram import bp as telegram_bp
+    app.register_blueprint(telegram_bp)
+
     return app  

@@ -43,20 +43,11 @@ def accept_request(request_id):
         r.add_specialist(specialist.id)
 
         #edit the group message
-        bot_token = '5976923303:AAFlyJjx7QAjWlKNlxDENLAHlmW2T1eAoUE'
-        base_url = f'https://api.telegram.org/bot{bot_token}/'
+        from app.telegram.models import UpdateMessage, free_group_id
         message_id = request.form['callback_query']['message']['message_id']
         message_text = request.form['callback_query']['message']['text']
-        edit_message_url = f'{base_url}editMessageText'
-        edit_params = {
-            'chat_id': request.form['callback_query']['message']['chat']['id'],
-            'message_id': message_id,
-            'text': message_text,
-            'reply_markup': None,
-            'parse_mode': 'HTML'
-        }
-        response = requests.post(edit_message_url, json=edit_params)
-        print(response.json())
+        update_message = UpdateMessage(free_group_id, message_id, message_text)
+        update_message.post()
 
         from app.manychat.models import TextMessage, ResponseContent, SendContent
         #message to the user

@@ -33,6 +33,10 @@ class Request(db.Model):
         return f"Запит {self.id}"
     
 
+    @classmethod
+    def get(cls, id) -> "Request":
+        return cls.query.get(id)
+
 
     @classmethod
     def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone, request_type):

@@ -50,39 +50,69 @@ def delete_specialist(specialist_id):
 
 @bp.route('/find_request/<int:request_id>', methods=['GET'])
 def find_request(request_id):
-    specialists = Specialist.find_by_request_id(request_id)
-    return render_template('specialists_cards.html', specialists=specialists, request_id=request_id)
+    from app.requests.models import Request
+    request = Request.get(request_id)
+    if request:
+        print('find_request: ', request)
+        specialists = Specialist.find_by_request_id(request_id)
+        if specialists:
+            return render_template('specialists_cards.html', specialists=specialists, request_id=request_id) 
+        else:
+            print('specialists not found')
+            error = 'Спеціалістів не знайдено'
+    else:
+        print('request not found')
+        error = 'Запит не знайдено'
+    return redirect(url_for('main.404'), error)
 
 
 @bp.route('/choose/<int:request_id>/<int:specialist_id>', methods=['GET'])
 def choose(request_id, specialist_id):
     specialist = Specialist.query.get(specialist_id)
-    
-    #update request
-    from app.requests.models import Request
-    r = Request.query.get(request_id)
-    r.add_specialist(specialist_id)
 
-    from app.manychat.models import TextMessage, ManychatSendMessage, UrlButton
-    #message to the user
-    user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
-    send_message = ManychatSendMessage(r.user.id, messages=[user_message.json])
-    send_message.post()
+    if specialist:
+        print('/n/n----------------/n')
+        print('choose: ', specialist)
+        #update request
+        from app.requests.models import Request
+        r = Request.get(request_id)
 
-    # #message to the specialist
-    # user_telegram_username = r.user.username
-    # specialist_message_btn = None
-    # if user_telegram_username:
-    #     specialist_message_btn = UrlButton(caption='Написати', url='https://t.me/').json
-    # specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn])
-    # send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
-    # send_message.post()
+        if r:
+            print('request: ', r)
+            r.add_specialist(specialist_id)
+            from app.manychat.models import TextMessage, ManychatSendMessage, UrlButton
+            user = r.user
 
-    #message to the group
-    from app.telegram.models import SendMessage, paid_group_id
-    text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: {r.user.username}'
-    group_message = SendMessage(paid_group_id, text)
-    group_message.post()
+            if user:
+                print('user: ', user)  
+                #message to the user
+                user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
+                send_message = ManychatSendMessage(r.user.id, messages=[user_message.json])
+                send_message.post()
 
-    return 'Запит надіслано'
+                # #message to the specialist
+                # user_telegram_username = r.user.username
+                # specialist_message_btn = None
+                # if user_telegram_username:
+                #     specialist_message_btn = UrlButton(caption='Написати', url='https://t.me/').json
+                # specialist_message = TextMessage(f'{r.user.name} обрав вас для запиту\n\nТег запиту: {r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}', buttons=[specialist_message_btn])
+                # send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
+                # send_message.post()
+
+                #message to the group
+                # from app.telegram.models import SendMessage, paid_group_id
+                # text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: {r.user.username}'
+                # group_message = SendMessage(paid_group_id, text)
+                # group_message.post()
+                return 'Запит надіслано'
+            else:
+                print('user not found')
+                error = 'Користувача не знайдено'
+        else:
+            print('request not found')
+            error = 'Запит не знайдено'
+    else:
+        print('specialist not found')
+        error = 'Спеціаліста не знідено'
+    return redirect(url_for('main.404'), error)
     

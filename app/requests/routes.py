@@ -72,18 +72,29 @@ def find_specialists():
     manychat_request = ManychatRequest(request)
     
     from app.users.models import User
-    User.get_and_update_or_create_from_request(manychat_request)
+    user = User.get_and_update_or_create_from_request(manychat_request)
     
-    Request.add_from_request(manychat_request)
+    request = Request.add_from_request(manychat_request)
+    if request:
+        print('/n/n----------------/n')
+        print('request founded: ', request)
+        from app.specialists.models import Specialist
+        specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
+        print('/n/n----------------/n')
+        print('specialists founded: ', specialists)
 
-    from app.specialists.models import Specialist
-    specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
-
-    if specialists:
-        specialists_number = len(specialists)
-        return {'status': '200', 'specialists': specialists_number}
+        if specialists:
+            specialists_number = len(specialists)
+            return {'status': '200', 'specialists': specialists_number}
+        else:
+            message = 'Спеціалістів не знайдено'
+            
     else:
-        return {'status': '404', 'specialists': 0}
+        print('/n/n----------------/n')
+        print('no request found')
+        message = 'Запит не знайдено'
+
+    return {'status': '404', 'specialists': 0, 'message': message}
 
 
 @bp.route('/request_card/<int:request_id>', methods=['GET'])

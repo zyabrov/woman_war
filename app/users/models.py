@@ -31,7 +31,7 @@ class User(db.Model):
 
 
     def __repr__(self):
-        return '<%r>' % self.name
+        return '%r' % self.name
     
     @classmethod
     def add_user(cls, id, name, username, telegram_id, birthdate:str, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
@@ -66,7 +66,7 @@ class User(db.Model):
 
 
     @classmethod 
-    def get_and_update_or_create_from_request(cls, request:ManychatRequest):
+    def get_and_update_or_create_from_request(cls, request:ManychatRequest) -> "User":
         user = cls.get(request.user_id)
         if not user:
             user = cls.add_user(
@@ -81,7 +81,11 @@ class User(db.Model):
                 request.phone,
                 request.how_known
             )
+            print('/n/n----------------/n')
+            print('new user: ', user)
         else:
+            print('/n/n----------------/n')
+            print('user exists')
             user.update_user(
                 name=request.full_name,
                 username=request.username,
@@ -89,6 +93,7 @@ class User(db.Model):
                 where_is_city = request.where_is_city,
                 worked_with_psychologist_before=request.worked_with_psychologist_before,
                 phone=request.phone)
+            print('user: ', user)
         return user
     
 

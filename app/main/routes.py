@@ -13,3 +13,8 @@ def create_tables():
     db.drop_all()
     db.create_all()
     return 'tables_created'
+
+
+@bp.route('404', methods=['GET', 'POST'])
+def not_found():
+    return render_template('404.html')

@@ -16,7 +16,10 @@
             <img class="card-img-top" src="{{ url_for('static', filename='images/' ~ specialist.id ~ '.JPG') }}" alt="Specialist">
             <div class="card-body">
               <h5 class="card-title">{{ specialist.name }}</h5>
-              <div class="card-text">{{ specialist.description }}</div>
+              <div class="card-text">
+                {{ specialist.description }}
+                <p>Вартість години консультації: {{ specialist.cost }} грн</p>
+              </div>
               <div class="card_buttons">
                 <a href="{{ specialist.cv }}" class="btn btn-info">ℹ️ Резюме</a>
                 <a href="{{ url_for('specialists.choose', request_id=request_id, specialist_id=specialist.id) }}" class="btn btn-success">✅ Обрати</a>

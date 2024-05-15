@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, SearchField, SelectField, BooleanField, HiddenField, SelectMultipleField
+from wtforms import StringField, TextAreaField, SubmitField, SearchField, SelectField, BooleanField, HiddenField, SelectMultipleField, IntegerField
 from wtforms.validators import InputRequired, URL
 
 
@@ -10,6 +10,7 @@ class NewSpecialistForm(FlaskForm):
     image_input = StringField("URL зображення", id='image_input', validators=[InputRequired(), URL()])
     cv_input = StringField("URL резюме", id='cv_input', validators=[InputRequired(), URL()])
     tags_select = SelectMultipleField("Теги", id='tags_select', choices=[], validators=[InputRequired()])
+    cost_input = IntegerField("Вартість години консультації", id='cost_input', validators=[InputRequired()])
     submit = SubmitField("Створити спеціаліста")
 
 

@@ -30,5 +30,10 @@
         {{ form.tags_select.errors }}
     {% endif %}
 
+    {{ form.cost_input.label }} {{ form.cost_input }}
+    {% if form.cost_input.errors %}
+        {{ form.cost_input.errors }}
+    {% endif %}
+
     {{ form.submit() }}
 </form>

@@ -2,15 +2,16 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Description</th>
-            <th>CV</th>
-            <th>Phone</th>
-            <th>Tags</th>
-            <th>Requests</th>
-            <th>Users</th>
-            <th>Actions</th>
+            <th>Ім'я</th>
+            <th>Зображення</th>
+            <th>Опис</th>
+            <th>Резюме</th>
+            <th>Телефон</th>
+            <th>Теги</th>
+            <th>Вартість</th>
+            <th>Запити</th>
+            <th>Користувачі</th>
+            <th>Дії</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
                 {{ tag.name }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </td>
+            <td>{{ specialist.cost }}</td>
             <td>{% if specialist.requests %}
                     {% for request in specialist.requests %}
                         <a href="{{ url_for('requests.request_card', request_id=request.id) }}">{{ request.id }}</a>{% if not loop.last %}, {% endif %}

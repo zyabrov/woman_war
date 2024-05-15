@@ -20,6 +20,7 @@ class Specialist(db.Model):
     phone = db.Column(db.String(255))
     tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
     telegram_username = db.Column(db.String(255))
+    cost = db.Column(db.Integer)
 
 
     def __repr__(self) -> str:
@@ -42,7 +43,8 @@ class Specialist(db.Model):
             description = form.description_input.data,
             cv = form.cv_input.data,
             id = form.id_input.data,
-            tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data]
+            tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data],
+            cost = form.cost_input.data
         )
         db.session.add(new_specialist)
         db.session.commit()
@@ -55,6 +57,7 @@ class Specialist(db.Model):
         self.cv = form.cv_input.data
         self.id = form.id_input.data
         self.tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data]
+        cost = form.cost_input.data
         db.session.commit()
 
 

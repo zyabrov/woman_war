@@ -66,33 +66,44 @@ def accept_request(request_id):
         return {'status': '404'}
 
 
-@bp.route('/find_specialists', methods=['POST'])
-def find_specialists():
+@bp.route('/new_find_specialists_request', methods=['POST'])
+def find_specialists_request(): 
     from app.manychat.models import ManychatRequest
-    manychat_request = ManychatRequest(request)
+    request_data = request.get_json()
+    print('/n/n----------------/n')
+    print('request_data: ', request_data)
+    manychat_request = ManychatRequest(request_data)
     
     from app.users.models import User
     user = User.get_and_update_or_create_from_request(manychat_request)
+    if user:
+        print('/n/n----------------/n')
+        print('user founded: ', user)
     
-    request = Request.add_from_request(manychat_request)
-    if request:
-        print('/n/n----------------/n')
-        print('request founded: ', request)
-        from app.specialists.models import Specialist
-        specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
-        print('/n/n----------------/n')
-        print('specialists founded: ', specialists)
+        r = Request.add_from_request(manychat_request)
+        if r:
+            print('/n/n----------------/n')
+            print('request founded: ', r)
+            from app.specialists.models import Specialist
+            specialists = Specialist.find_by_tag(manychat_request.get_request_tag())
 
-        if specialists:
-            specialists_number = len(specialists)
-            return {'status': '200', 'specialists': specialists_number}
-        else:
-            message = 'Спеціалістів не знайдено'
+            if specialists:
+                print('/n/n----------------/n')
+                print('specialists founded: ', specialists)
+                specialists_number = len(specialists)
+                return {'status': '200', 'specialists': specialists_number, 'message':'Знайдено спеціалістів: ' + str(specialists_number)}
+            else:
+                message = 'Спеціалістів не знайдено'
             
+        else:
+            print('/n/n----------------/n')
+            print('no request found')
+            message = 'Запит не знайдено'
+
     else:
         print('/n/n----------------/n')
-        print('no request found')
-        message = 'Запит не знайдено'
+        print('no user found')
+        message = 'Користувача не знайдено'
 
     return {'status': '404', 'specialists': 0, 'message': message}
 

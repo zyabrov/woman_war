@@ -65,9 +65,20 @@ class Specialist(db.Model):
 
     @classmethod
     def find_by_request_id(cls, request_id):
-        request = Request.query.get(request_id)
-        request_tag = request.tag
-        return cls.query.filter(Specialist.tags.any(id=request_tag.id)).all()
+        request = Request.get(request_id)
+        if request:
+            request_tag = request.tag
+            if request_tag:
+                print('/n/n----------------/n')
+                print('find_by_request_id: ', request_tag)
+                return cls.query.filter(Specialist.tags.any(id=request_tag.id)).all()
+            else:
+                print('/n/n----------------/n')
+                print('request tag not found')
+        else:
+            print('/n/n----------------/n')
+            print('request not found')
+        return []
 
     
     @classmethod

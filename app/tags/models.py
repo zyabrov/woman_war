@@ -10,7 +10,7 @@ class Tag(db.Model):
         return f"{self.name}"
 
     @classmethod
-    def get_by_name(cls, name):
+    def get_by_name(cls, name) -> "Tag":
         print('tag name', name)
         tag_name = name
         if " - " in name:

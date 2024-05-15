@@ -5,23 +5,22 @@ import requests
 
 class ManychatRequest():    
     def __init__(self, request):
-        self.request = request.get_json()
-        self.user_id = self.request['id']
-        self.username = self.request['custom_fields']['telegram_username']
-        self.telegram_id = self.request['custom_fields']['telegram_id']
-        self.full_name = self.request['custom_fields']["опитування_ім'я"]
-        self.tag_name = self.request['custom_fields']['запит_запит']
-        self.id = self.request['custom_fields']['request_id']
-        self.birthdate = self.request['custom_fields']['опитування_дата_народження']
-        self.where_is = self.request['custom_fields']['Опитування_де_знаходиться']
-        self.where_is_city = self.request['custom_fields']['опитування_місто']
-        self.worked_with_psychologist_before = self.request['custom_fields']['запит_досвід_з_психологом']
-        self.help_type = self.request['custom_fields']['опитування_яку_допомогу']
-        self.how_known = self.request['custom_fields']['запит_як_дізналися']
-        self.phone = self.request['phone']
-        self.group_name = self.request['custom_fields'].get('запит_група', None)
-        self.request_type = self.request['custom_fields']['тип_запиту']
-        print('ManychatRequest', self.request)
+        self.user_id = request['id']
+        self.username = request['custom_fields']['telegram_username']
+        self.telegram_id = request['custom_fields']['telegram_id']
+        self.full_name = request['custom_fields']["опитування_ім'я"]
+        self.tag_name = request['custom_fields']['запит_запит']
+        self.id = request['custom_fields']['request_id']
+        self.birthdate = request['custom_fields']['опитування_дата_народження']
+        self.where_is = request['custom_fields']['Опитування_де_знаходиться']
+        self.where_is_city = request['custom_fields']['опитування_місто']
+        self.worked_with_psychologist_before = request['custom_fields']['запит_досвід_з_психологом']
+        self.help_type = request['custom_fields']['опитування_яку_допомогу']
+        self.how_known = request['custom_fields']['запит_як_дізналися']
+        self.phone = request['phone']
+        self.group_name = request['custom_fields'].get('запит_група', None)
+        self.request_type = request['custom_fields']['тип_запиту']
+        print('ManychatRequest', request)
     
     def get_request_tag(self):
         from app.tags.models import Tag

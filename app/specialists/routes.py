@@ -63,7 +63,7 @@ def find_request(request_id):
     else:
         print('request not found')
         error = 'Запит не знайдено'
-    return redirect(url_for('main.404'), error)
+    return redirect(url_for('main.error'), error)
 
 
 @bp.route('/choose/<int:request_id>/<int:specialist_id>', methods=['GET'])
@@ -99,11 +99,11 @@ def choose(request_id, specialist_id):
                 # send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
                 # send_message.post()
 
-                #message to the group
-                # from app.telegram.models import SendMessage, paid_group_id
-                # text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: {r.user.username}'
-                # group_message = SendMessage(paid_group_id, text)
-                # group_message.post()
+                # message to the group
+                from app.telegram.models import SendMessage, paid_group_id
+                text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: {r.user.username}'
+                group_message = SendMessage(paid_group_id, text)
+                group_message.post()
                 return 'Запит надіслано'
             else:
                 print('user not found')
@@ -114,5 +114,5 @@ def choose(request_id, specialist_id):
     else:
         print('specialist not found')
         error = 'Спеціаліста не знідено'
-    return redirect(url_for('main.404'), error)
+    return redirect(url_for('main.error'), error)
     

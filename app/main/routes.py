@@ -15,6 +15,6 @@ def create_tables():
     return 'tables_created'
 
 
-@bp.route('404', methods=['GET', 'POST'])
-def not_found():
+@bp.route('/404', methods=['GET', 'POST'])
+def error():
     return render_template('404.html')

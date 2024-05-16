@@ -69,10 +69,12 @@ class Request(db.Model):
 
     @classmethod
     def add_from_request(cls, request: ManychatRequest):
-        from app.tags.models import Tag
         tag_id = None
-        if request.tag_name:
-            tag_id = Tag.get_by_name(request.tag_name).id
+        from app.tags.models import Tag
+        tag = Tag.get_by_name(request.tag_name)
+        if tag:
+            tag_id = tag.id
+            
         return cls.add(
             id = request.id,
             user_id = request.user_id,

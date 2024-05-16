@@ -51,7 +51,6 @@ class UpdateMessage():
             "chat_id": self.chat_id,
             "message_id": self.message_id,
             "text": self.text,
-            "disable_notification": False, 
             "parse_mode": "HTML"
         }
         if self.keyboard:
@@ -61,6 +60,7 @@ class UpdateMessage():
     def post(self):
         r = requests.post(self.url, json=self.json, headers=headers)
         print(r.json())
+        return r.json()
 
 
     

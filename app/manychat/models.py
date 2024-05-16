@@ -47,7 +47,8 @@ class TextMessage:
         message = {
             'type': self.type,
             'text': self.text,
-            'buttons': [self.buttons] if self.buttons else []
+            'buttons': [self.buttons] if self.buttons else [],
+            'parse_mode': 'HTML'
         }
         return message
 

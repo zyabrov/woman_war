@@ -58,21 +58,20 @@ def accept_request():
             message_id = int(r.message_id)
             message_text = f'Запит {r.id} прийняв спеціаліст {specialist.telegram_username}'
             update_message = UpdateMessage(free_group_id, message_id, message_text)
-            update_message.post()
+            update_message_response = update_message.post()
 
             from app.manychat.models import TextMessage, ResponseContent, ManychatSendMessage
             #message to the user
-            user = r.user
             user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name}')
-            send_message = ManychatSendMessage(user.id, messages=[user_message.json])
+            send_message = ManychatSendMessage(r.user_id, messages=[user_message.json])
             send_message.post()
 
             #message to the specialist
-            specialist_message = TextMessage(f'Запит {r.id} від {user.name} прийнятий./nПовідомлення клієнту надісано./n/nДані запиту: /nЗапит:{r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}')
+            specialist_message = TextMessage(f'Запит {r.id} від {r.user_full_name} прийнятий./nПовідомлення клієнту надісано./n/nДані запиту: /nЗапит:{r.tag}\nВік: {r.user_age}\nДата народження: {r.user_birthdate}\nДе знаходиться: {r.user_where_is} - {r.user_where_is_city}\nПопереднй досвід з психологом: {r.user_worked_with_psychologist_before}\nТелефон: {r.user_phone}\nЯк дізналися: {r.user_how_known}')
             send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
             send_message.post()
 
-            return {'status': '200'}
+            return {'status': '200', 'update_message_response': update_message_response}
         else:
             print('specialist not founded')
             return {'status': '404'}

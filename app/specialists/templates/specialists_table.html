@@ -20,8 +20,8 @@
             <td>{{ specialist.id }}</td>
             <td>{{ specialist.name }}</td>
             <td><img src="{{ url_for('static', filename='images/' ~ specialist.id ~ '.JPG') }}" width="100" alt="{{ specialist.name }}"></td>
-            <td>{{ specialist.description }}</td>
-            <td>{{ specialist.cv }}</td>
+            <td style="min-width: 400px;">{{ specialist.description }}</td>
+            <td style="max-width: 100px; overflow: auto;">{{ specialist.cv }}</td>
             <td>{{ specialist.phone }}</td>
             <td>
                 {% for tag in specialist.tags %}

@@ -20,6 +20,7 @@ class ManychatRequest():
         self.phone = request['phone']
         self.group_name = request['custom_fields'].get('запит_група', None)
         self.request_type = request['custom_fields']['тип_запиту']
+        self.manychat_username = request['name']
         print('ManychatRequest', request)
     
     def get_request_tag(self):
@@ -30,7 +31,9 @@ class ManychatRequest():
     def get_specialist(self):
         from app.specialists.models import Specialist
         return Specialist.find_by_tag(self.get_request_tag())
-    
+
+
+
 
 class TextMessage:
     def __init__(self, text, buttons=None):
@@ -55,6 +58,19 @@ headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
 }
+class ManychatFindSubscriber:
+    def __init__(self, manychat_name):
+        self.manychat_name = manychat_name
+        self.url = 'https://api.manychat.com/fb/subscribers/findByName'
+
+    def get(self):
+        return requests.get(self.url, params={'name': self.manychat_name}, headers=headers).json()
+
+    
+    @classmethod
+    def get_subscriber_id(cls, manychat_name) -> 'ManychatFindSubscriber':
+        subscriber_id = cls(manychat_name).get()['data'][0]['id']
+        return subscriber_id
 
 
 class ManychatSendMessage():

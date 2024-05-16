@@ -20,11 +20,16 @@ class Specialist(db.Model):
     phone = db.Column(db.String(255))
     tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
     telegram_username = db.Column(db.String(255))
+    manychat_username = db.Column(db.String(255))
     cost = db.Column(db.Integer)
 
 
     def __repr__(self) -> str:
         return f"{self.name}"
+    
+    @classmethod
+    def get(cls, id) -> "Specialist":
+        return cls.query.get(id)
 
     @classmethod
     def find_by_tag(cls, tag):
@@ -35,16 +40,30 @@ class Specialist(db.Model):
     def get_by_phone(cls, phone):
         return cls.query.filter_by(phone=phone).first()
     
+    @classmethod
+    def add_free(cls, manychat_id, manychat_username, telegram_username=None) -> "Specialist":
+        specialist = cls(
+            id = manychat_id,
+            manychat_username = manychat_username,
+            telegram_username = telegram_username,
+            name = manychat_username
+        )
+        db.session.add(specialist)
+        db.session.commit()
+        return specialist
+    
 
     @classmethod
-    def add(cls, form: NewSpecialistForm):
+    def add(cls, form: NewSpecialistForm, manychat_id) -> "Specialist":
         new_specialist = cls(
+            id = manychat_id,
             name = form.name_input.data,
             description = form.description_input.data,
             cv = form.cv_input.data,
-            id = form.id_input.data,
             tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data],
-            cost = form.cost_input.data
+            cost = form.cost_input.data,
+            manychat_username = form.manychat_username_input.data,
+            image = form.image_input.data
         )
         db.session.add(new_specialist)
         db.session.commit()
@@ -85,7 +104,7 @@ class Specialist(db.Model):
 
     
     @classmethod
-    def find_by_telegram_username(cls, username):
+    def find_by_telegram_username(cls, username) -> 'Specialist':
         return cls.query.filter_by(telegram_username=username).first()
     
 

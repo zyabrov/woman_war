@@ -11,7 +11,7 @@ def specialists():
 
 @bp.route('/<int:specialist_id>', methods=['GET', 'POST'])
 def specialist_card(specialist_id):
-    specialist = Specialist.query.get(specialist_id)
+    specialist = Specialist.get(specialist_id)
     if specialist:
         return render_template('specialist_card.html', specialist=specialist)
         
@@ -21,17 +21,59 @@ def new_specialist():
     form = NewSpecialistForm(request.form)
 
     if form.validate_on_submit():
-        new_specialist = Specialist.add(form)
-        return render_template('specialists.html', specialists=Specialist.query.all())
+        from app.manychat.models import ManychatFindSubscriber
+        manychat_id = ManychatFindSubscriber.get_subscriber_id(form.manychat_username_input.data)
+        if manychat_id:
+            print('/n/n----------------/n')
+            print('specialist manychat_id: ', manychat_id)
+            new_specialist = Specialist.add(form, manychat_id)
+            if new_specialist:
+                print('new_specialist: ', new_specialist)
+                return redirect(url_for('specialists.specialists'))
+            else:
+                print('new_specialist error')
+        else:
+            print('manychat_id error')
     
     return render_template('new_specialist.html', form=form)
 
 
+@bp.route('/add_specialist/free', methods=['POST'])
+def new_specialist_free():
+    from app.manychat.models import ManychatRequest
+    manychat_request = ManychatRequest(request.get_json())
+    specialist = Specialist.get(manychat_request.user_id)
+    if not specialist:
+        specialist = Specialist.add_free(manychat_request.user_id, manychat_request.manychat_username, manychat_request.username)
+        if specialist:
+            print('/n/n----------------/n')
+            print('new_specialist: ', specialist)
+            message = 'Specialist was added'
+            return {'status': '200', 'message': message}
+        else:
+            print('/n/n----------------/n')
+            print('new_specialist error')
+            message = 'Specialist was not added'
+            return {'status': '500', 'message': message}
+    else:
+        print('/n/n----------------/n')
+        print('specialist already exist')
+        message = 'Specialist already exist'
+        return {'status': '200', 'message': message}
+
+
 @bp.route('/edit_specialist/<int:specialist_id>', methods=['GET', 'POST'])
 def edit_specialist(specialist_id):
-    specialist = Specialist.query.get(specialist_id)
+    specialist = Specialist.get(specialist_id)
     if specialist:
-        form = NewSpecialistForm(request.form, obj=specialist)
+        form = NewSpecialistForm(
+            name_input = specialist.name,
+            description_input = specialist.description,
+            cv_input = specialist.cv,
+            image_input = specialist.image,
+            tags_select = [tag.id for tag in specialist.tags],
+            cost_input = specialist.cost
+        )
     
         if form.validate_on_submit():
             specialist.edit(form)
@@ -41,7 +83,7 @@ def edit_specialist(specialist_id):
 
 @bp.route('/delete_specialist/<int:specialist_id>', methods=['GET', 'POST'])
 def delete_specialist(specialist_id):
-    specialist = Specialist.query.get(specialist_id)
+    specialist = Specialist.get(specialist_id)
     if specialist:
         specialist.delete()
         return redirect(url_for('specialists.specialists'))
@@ -51,10 +93,10 @@ def delete_specialist(specialist_id):
 @bp.route('/find_request/<int:request_id>', methods=['GET'])
 def find_request(request_id):
     from app.requests.models import Request
-    request = Request.get(request_id)
-    if request:
-        print('find_request: ', request)
-        specialists = Specialist.find_by_request_id(request_id)
+    r = Request.get(request_id)
+    if r:
+        print('find_request: ', r)
+        specialists = Specialist.find_by_request_id(r.id)
         if specialists:
             return render_template('specialists_cards.html', specialists=specialists, request_id=request_id) 
         else:
@@ -68,7 +110,7 @@ def find_request(request_id):
 
 @bp.route('/choose/<int:request_id>/<int:specialist_id>', methods=['GET'])
 def choose(request_id, specialist_id):
-    specialist = Specialist.query.get(specialist_id)
+    specialist = Specialist.get(specialist_id)
 
     if specialist:
         print('/n/n----------------/n')
@@ -115,4 +157,15 @@ def choose(request_id, specialist_id):
         print('specialist not found')
         error = 'Спеціаліста не знідено'
     return redirect(url_for('main.error'), error)
-    
+
+
+@bp.route('/form/update_selected_tags', methods=['POST'])
+def update_selected_tags():
+    form = NewSpecialistForm(request.form)
+    tags = form.tags
+    if tags:
+        print('/n/n-----------/n')
+        print('form tags: ', tags)
+        form = NewSpecialistForm(
+
+        )

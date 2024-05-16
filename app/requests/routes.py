@@ -30,27 +30,32 @@ def free_request_group():
         return {'status': '404'}
     
 
-@bp.route('/accept/<int:request_id>', methods=['POST'])
-def accept_request(request_id):
-    if request.method == 'POST':
-        update = request.json
-        message = update['message']
-        print('/n/n----------/n')
-        print('message from request: ', message)
+@bp.route('/save_message_id', methods=['POST'])
+def save_message_id():
+    from app.manychat.models import ManychatRequest
+    manychat_request = ManychatRequest(request.get_json())
+    r = Request.get(manychat_request.id)
+    if r:
+        r.save_message_id(manychat_request.message_id)
+        return {'status': '200'}
+    else:
+        return {'status': '404'}
 
-    from app.specialists.models import Specialist
-    specialist = Specialist.find_by_telegram_username(message['from']['username'])
-    if specialist:
-        print('/n/n----------/n')
-        print('accept request specialist: ', specialist)
-        r = Request.get(request_id)
-        if r:
-            print('accept request: ', r)
+
+@bp.route('/accept', methods=['POST'])
+def accept_request():
+    from app.manychat.models import ManychatRequest
+    manychat_request = ManychatRequest(request.get_json())
+    r = Request.get(manychat_request.id)
+    if r:
+        from app.specialists.models import Specialist
+        specialist = Specialist.get(manychat_request.user_id)
+        if specialist:
             r.add_specialist(specialist.id)
 
             #edit the group message
             from app.telegram.models import UpdateMessage, free_group_id
-            message_id = message['message_id']
+            message_id = int(r.message_id)
             message_text = f'Запит {r.id} прийняв спеціаліст {specialist.telegram_username}'
             update_message = UpdateMessage(free_group_id, message_id, message_text)
             update_message.post()
@@ -69,10 +74,10 @@ def accept_request(request_id):
 
             return {'status': '200'}
         else:
-            print('request not founded')
+            print('specialist not founded')
             return {'status': '404'}
     else:
-        print('specialist not founded')
+        print('request not founded')
         return {'status': '404'}
 
 

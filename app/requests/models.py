@@ -26,6 +26,8 @@ class Request(db.Model):
     specialist_id = db.Column(db.Integer, db.ForeignKey("specialist.id"), nullable=True)
     specialist = db.relationship("Specialist", backref="requests")
 
+    message_id = db.Column(db.Integer)
+
 
 
 
@@ -97,5 +99,10 @@ class Request(db.Model):
 
     def delete(self):
         db.session.delete(self)
+        db.session.commit()
+
+    
+    def save_message_id(self, message_id):
+        self.message_id = int(message_id)
         db.session.commit()
         

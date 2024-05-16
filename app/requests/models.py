@@ -17,7 +17,7 @@ class Request(db.Model):
     user_how_known = db.Column(db.String(80), nullable=False)
     user_phone = db.Column(db.Integer, nullable=False)
     request_type = db.Column(db.String(80), nullable=False)
-    tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=True)
     tag = db.relationship("Tag", backref="requests")
     user_age = db.Column(db.Integer)
     
@@ -74,7 +74,7 @@ class Request(db.Model):
         tag = Tag.get_by_name(request.tag_name)
         if tag:
             tag_id = tag.id
-            
+
         return cls.add(
             id = request.id,
             user_id = request.user_id,

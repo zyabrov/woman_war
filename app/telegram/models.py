@@ -34,7 +34,6 @@ class SendMessage():
 
     def post(self):
         r = requests.post(self.url, json=self.json, headers=headers)
-        r.raise_for_status()
         print(r.json())
     
     
@@ -61,7 +60,6 @@ class UpdateMessage():
     
     def post(self):
         r = requests.post(self.url, json=self.json, headers=headers)
-        r.raise_for_status()
         print(r.json())
 
 

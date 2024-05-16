@@ -30,12 +30,16 @@ def free_request_group():
         return {'status': '404'}
     
 
-@bp.route('/accept/<int:request_id>', methods=['GET'])
+@bp.route('/accept/<int:request_id>', methods=['POST'])
 def accept_request(request_id):
-    print('/n/n----------/n')
-    print('request: ', request.get_json())
+    if request.method == 'POST':
+        update = request.json
+        message = update['message']
+        print('/n/n----------/n')
+        print('message from request: ', message)
+
     from app.specialists.models import Specialist
-    specialist = Specialist.find_by_telegram_username(request.get_json()['callback_query']['from']['username'])
+    specialist = Specialist.find_by_telegram_username(message['from']['username'])
     if specialist:
         print('/n/n----------/n')
         print('accept request specialist: ', specialist)
@@ -46,7 +50,7 @@ def accept_request(request_id):
 
             #edit the group message
             from app.telegram.models import UpdateMessage, free_group_id
-            message_id = request.form['callback_query']['message']['message_id']
+            message_id = message['message_id']
             message_text = f'Запит {r.id} прийняв спеціаліст {specialist.telegram_username}'
             update_message = UpdateMessage(free_group_id, message_id, message_text)
             update_message.post()

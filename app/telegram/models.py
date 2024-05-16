@@ -7,7 +7,7 @@ headers = {
     }
 base_url = "https://api.telegram.org/bot" + BOT_TOKEN
 paid_group_id = -4179064257
-free_group_id = -1001342499881
+free_group_id = -1001737817814
     
 
 

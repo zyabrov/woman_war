@@ -33,9 +33,9 @@ def free_request_group():
 @bp.route('/accept/<int:request_id>', methods=['GET'])
 def accept_request(request_id):
     print('/n/n----------/n')
-    print('request: ', request)
+    print('request: ', request.get_json())
     from app.specialists.models import Specialist
-    specialist = Specialist.find_by_telegram_username(request.form['callback_query']['from']['username'])
+    specialist = Specialist.find_by_telegram_username(request.get_json()['callback_query']['from']['username'])
     if specialist:
         print('/n/n----------/n')
         print('accept request specialist: ', specialist)

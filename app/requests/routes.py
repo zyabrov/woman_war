@@ -67,15 +67,16 @@ def accept_request():
             send_message.post()
 
             #message to the specialist
-            specialist_message = TextMessage(f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
-                                             Дані запиту: 
-                                             Запит:{r.request_name}
-                                             Вік: {r.user_age}
-                                             Дата народження: {r.user_birthdate}
-                                             Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
-                                             Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
-                                             Телефон: {r.user_phone}
-                                             Як дізналися: {r.user_how_known}''')
+            specialist_message = TextMessage(
+                f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
+
+                Запит:{r.request_name}
+                Вік: {r.user_age}
+                Дата народження: {r.user_birthdate}
+                Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
+                Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
+                Телефон: {r.user_phone}
+                Як дізналися: {r.user_how_known}''')
             send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
             send_message.post()
 

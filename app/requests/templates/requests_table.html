@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>Запит</th>
             <th>Коли створений</th>
             <th>Тег</th>
             <th>Клієнт</th>
@@ -24,6 +25,7 @@
         {% for request in requests %}
         <tr>
             <td>{{ request.id }}</td>
+            <td>{{ request.request_name }}</td>
             <td>{{ request.created_date }}</td>
             <td>{{ request.tag }}</td>
             <td><a href="{{ url_for('users.user_card', user_id=request.user_id) }}">{{ request.user }}</a></td>

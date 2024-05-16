@@ -14,7 +14,7 @@ def free_request():
     manychat_request = ManychatRequest(request.get_json())
     r = Request.add_from_request(manychat_request)
     if r:
-        return {'status': '200'}
+        return {'status': '200', 'user_age': r.user_age}
     else:
         return {'status': '404'}
 

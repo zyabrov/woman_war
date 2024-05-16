@@ -11,6 +11,8 @@
             <th>Вартість</th>
             <th>Запити</th>
             <th>Користувачі</th>
+            <th>Manychat Username</th>
+            <th>Telegram Username</th>
             <th>Дії</th>
         </tr>
     </thead>
@@ -44,6 +46,16 @@
                     {% endfor %}
                 {% else %}
                     Немає користувачів
+                {% endif %}
+            </td>
+            <td>
+                {% if specialist.manychat_username %}
+                    {% specialist.manychat_username %}
+                {% endif %}
+            </td>
+            <td>
+                {% if specialist.telegram_username %}
+                    {% specialist.telegram_username %}
                 {% endif %}
             </td>
             <td>

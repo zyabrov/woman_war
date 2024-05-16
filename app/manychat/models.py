@@ -102,7 +102,6 @@ class ManychatSendMessage():
 
     def post(self):
         r = requests.post(url, json=self.json, headers=headers)
-        r.raise_for_status()
         print(r.json())
 
 
@@ -192,6 +191,5 @@ class SendContent():
     
     def post(self):
         r = requests.post(self.url, json=self.to_json(), headers=self.headers)
-        r.raise_for_status()
         print(r.json())
 

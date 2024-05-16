@@ -60,17 +60,17 @@ def accept_request():
             update_message = UpdateMessage(free_group_id, message_id, message_text)
             update_message.post()
 
-            from app.manychat.models import TextMessage, ResponseContent, SendContent
+            from app.manychat.models import TextMessage, ResponseContent, ManychatSendMessage
             #message to the user
             user = r.user
             user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name}')
-            send_content = SendContent(user.id, ResponseContent(msg_type='telegram', messages=[user_message.json]))
-            send_content.post()
+            send_message = ManychatSendMessage(user.id, messages=[user_message.json])
+            send_message.post()
 
             #message to the specialist
             specialist_message = TextMessage(f'Запит {r.id} від {user.name} прийнятий./nПовідомлення клієнту надісано./n/nДані запиту: /nЗапит:{r.tag}\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nТелефон: {r.user.phone}\nЯк дізналися: {r.user.how_known}')
-            send_content = SendContent(specialist.id, ResponseContent(msg_type='telegram', messages=[specialist_message.json]))
-            send_content.post()
+            send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
+            send_message.post()
 
             return {'status': '200'}
         else:

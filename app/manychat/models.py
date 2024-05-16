@@ -21,7 +21,7 @@ class ManychatRequest():
         self.group_name = request['custom_fields'].get('запит_група', None)
         self.request_type = request['custom_fields']['тип_запиту']
         self.manychat_username = request['name']
-        self.message_id = request['custom_fields'].get('message_id')
+        self.message_id = request['custom_fields'].get('request_message_id')
         print('ManychatRequest', request)
     
     def get_request_tag(self):

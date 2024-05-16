@@ -56,18 +56,26 @@ def accept_request():
             #edit the group message
             from app.telegram.models import UpdateMessage, free_group_id
             message_id = int(r.message_id)
-            message_text = f'Запит {r.id} прийняв спеціаліст {specialist.telegram_username}'
+            message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
             update_message = UpdateMessage(free_group_id, message_id, message_text)
             update_message_response = update_message.post()
 
-            from app.manychat.models import TextMessage, ResponseContent, ManychatSendMessage
+            from app.manychat.models import TextMessage, ManychatSendMessage
             #message to the user
-            user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name}')
+            user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
             send_message = ManychatSendMessage(r.user_id, messages=[user_message.json])
             send_message.post()
 
             #message to the specialist
-            specialist_message = TextMessage(f'Запит {r.id} від {r.user_full_name} прийнятий./nПовідомлення клієнту надісано./n/nДані запиту: /nЗапит:{r.tag}\nВік: {r.user_age}\nДата народження: {r.user_birthdate}\nДе знаходиться: {r.user_where_is} - {r.user_where_is_city}\nПопереднй досвід з психологом: {r.user_worked_with_psychologist_before}\nТелефон: {r.user_phone}\nЯк дізналися: {r.user_how_known}')
+            specialist_message = TextMessage(f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
+                                             Дані запиту: 
+                                             Запит:{r.request_name}
+                                             Вік: {r.user_age}
+                                             Дата народження: {r.user_birthdate}
+                                             Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
+                                             Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
+                                             Телефон: {r.user_phone}
+                                             Як дізналися: {r.user_how_known}''')
             send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
             send_message.post()
 

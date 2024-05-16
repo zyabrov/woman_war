@@ -20,6 +20,7 @@ class Request(db.Model):
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=True)
     tag = db.relationship("Tag", backref="requests")
     user_age = db.Column(db.Integer)
+    request_name = db.Column(db.String(80))
     
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref="requests")
@@ -42,7 +43,7 @@ class Request(db.Model):
 
 
     @classmethod
-    def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone, request_type):
+    def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone, request_type, request_name):
         user_age = (datetime.now().date() - datetime.strptime(user_birthdate, "%Y-%m-%d").date()).days // 365
         new_request = cls(
             id = id,
@@ -60,7 +61,8 @@ class Request(db.Model):
             tag_id = tag_id,
             user_id = user_id,
             request_type = request_type,
-            user_age = user_age
+            user_age = user_age, 
+            request_name = request_name
         )
         db.session.add(new_request)
         db.session.commit()
@@ -89,7 +91,8 @@ class Request(db.Model):
             help_type = request.help_type,
             user_how_known = request.how_known,
             user_phone = request.phone,
-            request_type = request.request_type
+            request_type = request.request_type,
+            request_name = request.tag_name
         )
 
 

@@ -57,22 +57,42 @@ url = 'https://api.manychat.com/fb/sending/sendContent'
 API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
 headers = {
     'Authorization': 'Bearer ' + API_TOKEN,
-    'Content-Type': 'application/json',
     'Accept': 'application/json'
 }
 class ManychatFindSubscriber:
     def __init__(self, manychat_name):
         self.manychat_name = manychat_name
-        self.url = 'https://api.manychat.com/fb/subscribers/findByName'
+        self.url = 'https://api.manychat.com/fb/subscriber/findByName'
 
-    def get(self):
-        return requests.get(self.url, params={'name': self.manychat_name}, headers=headers).json()
+    def get(self, token):
+        headers = {
+            'accept': 'application/json',
+            'Authorization': f'Bearer {token}'
+        }
+        params = {'name': self.manychat_name}
+        response = requests.get(self.url, params=params, headers=headers)
+        
+        try:
+            response.raise_for_status()  # Check if the request was successful
+            response_data = response.json()
+            print('Response from ManyChat API:')
+            print(response_data)
+            return response_data
+        except requests.exceptions.RequestException as e:
+            print(f"Error during request: {e}")
+        
+        return None
 
-    
     @classmethod
-    def get_subscriber_id(cls, manychat_name) -> 'ManychatFindSubscriber':
-        subscriber_id = cls(manychat_name).get()['data'][0]['id']
-        return subscriber_id
+    def get_subscriber_id(cls, manychat_name):
+        response_data = cls(manychat_name).get()
+        
+        if response_data and 'data' in response_data and response_data['data']:
+            subscriber_id = response_data['data'][0]['id']
+            return subscriber_id
+        else:
+            print("No subscriber ID found in the response.")
+            return None
 
 
 class ManychatSendMessage():

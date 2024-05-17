@@ -1,6 +1,6 @@
-<div method="POST" action="{{ url_for('specialists.new_specialist') }}" style="max-width: 640px;">
-    {{ form.hidden_tag() }}
+<form method="POST" action="{{ url_for('specialists.new_specialist') }}" style="max-width: 640px;">
     {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
     
     <div class="form-group">
     {{ form.name_input.label }}<br> {{ form.name_input }}
@@ -33,7 +33,7 @@
     {% endif %}
     </div>
     <div class="form-group">
-    {{ form.tags_select.label }}<br> {{ form.tags_select }}
+    {{ form.tags_select.label }}<br> {{ form.tags_select(size=form.tags_select.choices|length) }}
     {% if form.tags_select.errors %}
         {{ form.tags_select.errors }}
     {% endif %}

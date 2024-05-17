@@ -8,6 +8,11 @@ class Tag(db.Model):
     
     def __repr__(self) -> str:
         return f"{self.name}"
+    
+    @classmethod
+    def get(cls, id) -> 'Tag':
+        return cls.query.get(id)
+        
 
     @classmethod
     def get_by_name(cls, name) -> "Tag":

@@ -18,15 +18,33 @@ def specialist_card(specialist_id):
 
 @bp.route('/new_specialist', methods=['GET', 'POST'])
 def new_specialist():
-    form = NewSpecialistForm(request.form)
+    print('/n/n----------------/n')
+    print('new_specialist request: ', request.form)
+    form = NewSpecialistForm()
+    selected_tags = None
 
     if form.validate_on_submit():
+        selected_tags = form.tags_select.data
+        print('/n/n----------------/n')
+        print('selected_tags: ', selected_tags)
         from app.manychat.models import ManychatFindSubscriber
-        manychat_id = ManychatFindSubscriber.get_subscriber_id(form.manychat_username_input.data)
+        subscriber_finder = ManychatFindSubscriber(form.manychat_username_input.data)
+        access_token = "539030:b5bb217ba67cc15f9059df99e175a204"
+        response_data = subscriber_finder.get(access_token)
+        print('/n/n----------------/n')
+        print('response_data: ', response_data)
+        
+        manychat_id = response_data.get('data')[0]['id']
+        for field in response_data['data'][0]['custom_fields']:
+            if field['name'] == 'telegram_username':
+                telegram_username = field['value']
+            elif field['name'] == 'phone':
+                phone = field['value']
+
         if manychat_id:
             print('/n/n----------------/n')
             print('specialist manychat_id: ', manychat_id)
-            new_specialist = Specialist.add(form, manychat_id)
+            new_specialist = Specialist.add(form, manychat_id, telegram_username, phone)
             if new_specialist:
                 print('new_specialist: ', new_specialist)
                 return redirect(url_for('specialists.specialists'))
@@ -35,7 +53,7 @@ def new_specialist():
         else:
             print('manychat_id error')
     
-    return render_template('new_specialist.html', form=form)
+    return render_template('new_specialist.html', form=form, selected_tags=selected_tags)
 
 
 @bp.route('/add_specialist/free', methods=['POST'])

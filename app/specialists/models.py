@@ -54,16 +54,17 @@ class Specialist(db.Model):
     
 
     @classmethod
-    def add(cls, form: NewSpecialistForm, manychat_id) -> "Specialist":
+    def add(cls, form: NewSpecialistForm, manychat_id, telegram_username, phone) -> "Specialist":
         new_specialist = cls(
             id = manychat_id,
             name = form.name_input.data,
             description = form.description_input.data,
             cv = form.cv_input.data,
-            tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data],
+            tags = [Tag.get(tag_id) for tag_id in form.tags_select.data],
             cost = form.cost_input.data,
             manychat_username = form.manychat_username_input.data,
-            image = form.image_input.data
+            telegram_username = telegram_username,
+            phone = phone
         )
         db.session.add(new_specialist)
         db.session.commit()

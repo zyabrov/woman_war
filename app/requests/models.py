@@ -95,13 +95,6 @@ class Request(db.Model):
             request_name = request.tag_name
         )
 
-
-    
-
-    def add_specialist(self, specialist_id):
-        self.specialist_id = specialist_id
-        db.session.commit()
-
     
     def get_user(self):
         from app.users.models import User
@@ -115,5 +108,10 @@ class Request(db.Model):
     
     def save_message_id(self, message_id):
         self.message_id = int(message_id)
+        db.session.commit()
+
+
+    def add_specialist(self, specialist_id):
+        self.specialist_id = specialist_id
         db.session.commit()
         

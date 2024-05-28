@@ -11,8 +11,13 @@ def requests():
 @bp.route('/free', methods=['POST'])
 def free_request():
     from app.manychat.models import ManychatRequest
+    from app.users.models import User
     manychat_request = ManychatRequest(request.get_json())
+    user = User.get_and_update_or_create_from_request(manychat_request)
+    print('\n\n----------------\n')
+    print('free request user: ', user)
     r = Request.add_from_request(manychat_request)
+    print('new free request: ', r)
     if r:
         return {'status': '200', 'user_age': r.user_age}
     else:
@@ -45,48 +50,45 @@ def save_message_id():
 @bp.route('/accept', methods=['POST'])
 def accept_request():
     from app.manychat.models import ManychatRequest
+    from app.telegram.models import UpdateMessage, free_group_id
+    from app.specialists.models import Specialist
+    from app.manychat.models import TextMessage, ManychatSendMessage
+    
     manychat_request = ManychatRequest(request.get_json())
-    r = Request.get(manychat_request.id)
-    if r:
-        from app.specialists.models import Specialist
-        specialist = Specialist.get(manychat_request.user_id)
-        if specialist:
-            r.add_specialist(specialist.id)
+    specialist = Specialist.get(manychat_request.user_id)
+    print('\n\n----------------\n')
+    print('specialist: ', specialist)
+    print('user request id: ', manychat_request.user_request_id)
 
-            #edit the group message
-            from app.telegram.models import UpdateMessage, free_group_id
-            message_id = int(r.message_id)
-            message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
-            update_message = UpdateMessage(free_group_id, message_id, message_text)
-            update_message_response = update_message.post()
+    r = Request.get(int(manychat_request.user_request_id))
+    r.add_specialist(specialist.id)
 
-            from app.manychat.models import TextMessage, ManychatSendMessage
-            #message to the user
-            user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
-            send_message = ManychatSendMessage(r.user_id, messages=[user_message.json])
-            send_message.post()
+    #edit the group message
+    message_id = int(r.message_id)
+    message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
+    update_message = UpdateMessage(free_group_id, message_id, message_text)
+    update_message_response = update_message.post()
 
-            #message to the specialist
-            specialist_message = TextMessage(
-                f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
+    #message to the user
+    user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
+    send_message = ManychatSendMessage(r.user_id, messages=[user_message.json])
+    send_message.post()
 
-                Запит:{r.request_name}
-                Вік: {r.user_age}
-                Дата народження: {r.user_birthdate}
-                Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
-                Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
-                Телефон: {r.user_phone}
-                Як дізналися: {r.user_how_known}''')
-            send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
-            send_message.post()
+    #message to the specialist
+    specialist_message = TextMessage(
+        f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
 
-            return {'status': '200', 'update_message_response': update_message_response}
-        else:
-            print('specialist not founded')
-            return {'status': '404'}
-    else:
-        print('request not founded')
-        return {'status': '404'}
+        Запит:{r.request_name}
+        Вік: {r.user_age}
+        Дата народження: {r.user_birthdate}
+        Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
+        Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
+        Телефон: {r.user_phone}
+        Як дізналися: {r.user_how_known}''')
+    send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
+    send_message.post()
+
+    return {'status': '200', 'update_message_response': update_message_response}
 
 
 @bp.route('/new_find_specialists_request', methods=['POST'])

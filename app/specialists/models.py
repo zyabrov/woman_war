@@ -58,6 +58,8 @@ class Specialist(db.Model):
     def add(cls, name, manychat_id, telegram_username, manychat_username, phone=None, description=None, cv=None, tags=None, cost=None, manychat_img=None) -> "Specialist":
         if tags and isinstance(tags, list):
             tags = [Tag.get(tag_id) for tag_id in tags]
+        else:
+            tags = []
         new_specialist = cls(
             id = manychat_id,
             name = name,

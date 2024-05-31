@@ -38,13 +38,24 @@ def new_specialist():
         for field in response_data['data'][0]['custom_fields']:
             if field['name'] == 'telegram_username':
                 telegram_username = field['value']
-            elif field['name'] == 'phone':
+            if field['name'] == 'phone':
                 phone = field['value']
 
         if manychat_id:
             print('/n/n----------------/n')
             print('specialist manychat_id: ', manychat_id)
-            new_specialist = Specialist.add(form, manychat_id, telegram_username, phone)
+            new_specialist = Specialist.add(
+                name=form.name.data,
+                manychat_id=manychat_id,
+                manychat_username=form.manychat_username_input.data,
+                telegram_username=telegram_username,
+                phone=phone,
+                description=form.description.data,
+                cv=form.cv.data,
+                tags=selected_tags,
+                cost=form.cost.data,
+                manychat_img=response_data['data'][0].get('profile_pic')
+            )
             if new_specialist:
                 print('new_specialist: ', new_specialist)
                 return redirect(url_for('specialists.specialists'))

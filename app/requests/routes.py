@@ -59,6 +59,16 @@ def accept_request():
     print('\n\n----------------\n')
     print('specialist: ', specialist)
     print('user request id: ', manychat_request.user_request_id)
+    if not specialist:
+        specialist = Specialist.add(
+            name=manychat_request.manychat_username, 
+            manychat_id=manychat_request.user_id,
+            manychat_username=manychat_request.manychat_username,
+            telegram_username=manychat_request.username,
+            phone=manychat_request.phone,
+            manychat_img=manychat_request.manychat_img
+        )
+        print('new specialist: ', specialist)
 
     r = Request.get(int(manychat_request.user_request_id))
     r.add_specialist(specialist.id)

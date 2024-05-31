@@ -22,6 +22,7 @@ class Specialist(db.Model):
     telegram_username = db.Column(db.String(255))
     manychat_username = db.Column(db.String(255))
     cost = db.Column(db.Integer)
+    manychat_img = db.Column(db.String(255))
 
 
     def __repr__(self) -> str:
@@ -54,17 +55,18 @@ class Specialist(db.Model):
     
 
     @classmethod
-    def add(cls, form: NewSpecialistForm, manychat_id, telegram_username, phone) -> "Specialist":
+    def add(cls, name, manychat_id, telegram_username, manychat_username, phone=None, description=None, cv=None, tags=None, cost=None, manychat_img=None) -> "Specialist":
         new_specialist = cls(
             id = manychat_id,
-            name = form.name_input.data,
-            description = form.description_input.data,
-            cv = form.cv_input.data,
-            tags = [Tag.get(tag_id) for tag_id in form.tags_select.data],
-            cost = form.cost_input.data,
-            manychat_username = form.manychat_username_input.data,
+            name = name,
+            description = description,
+            cv = cv,
+            tags = [Tag.get(tag_id) for tag_id in tags],
+            cost = cost,
+            manychat_username = manychat_username,
             telegram_username = telegram_username,
-            phone = phone
+            phone = phone,
+            manychat_img = manychat_img
         )
         db.session.add(new_specialist)
         db.session.commit()

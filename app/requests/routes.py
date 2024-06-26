@@ -71,6 +71,7 @@ def accept_request():
         print('new specialist: ', specialist)
 
     r = Request.get(int(manychat_request.user_request_id))
+    print('request:', r)
     r.add_specialist(specialist.id)
 
     #edit the group message

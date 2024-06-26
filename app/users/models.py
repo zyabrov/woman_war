@@ -82,7 +82,7 @@ class User(db.Model):
                 request.how_known
             )
             print('/n/n----------------/n')
-            print('new user: ', user)
+            print('new user added: ', user)
         else:
             print('/n/n----------------/n')
             print('user exists')

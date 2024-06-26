@@ -6,7 +6,7 @@ import requests
 class ManychatRequest():    
     def __init__(self, request):
         self.user_id = request['id']
-        self.username = request['custom_fields']['telegram_username']
+        self.username = request['custom_fields'].get('telegram_username', None)
         self.telegram_id = request['custom_fields']['telegram_id']
         self.full_name = request['custom_fields']["опитування_ім'я"]
         self.tag_name = request['custom_fields']['запит_запит']

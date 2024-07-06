@@ -19,6 +19,17 @@
             <th>Телефон</th>
             <th>Тип запиту</th>
             <th>Дії</th>
+            <th>Відгуки</th>
+            <th>Відгук питання 1</th>
+            <th>Відгук питання 2</th>
+            <th>Відгук питання 3</th>
+            <th>Відгук питання 4</th>
+            <th>Відгук питання 5</th>
+            <th>Відгук питання 6</th>
+            <th>Відгук питання 7</th>
+            <th>Відгук питання 8</th>
+            <th>Відгук питання 9</th>
+            <th>Відгук питання 10</th>
         </tr>
     </thead>
     <tbody>
@@ -50,6 +61,23 @@
             <td>
                 <a href="{{ url_for('requests.delete_request', request_id=request.id) }}">Delete</a>
             </td>
+            <td>
+                {% if request.feedback %}
+                    <a href="{{ url_for('feedbacks.feedback_card', feedback_id=request.feedback_id) }}">{{ request.feedback_id }}</a>
+                {% else %}
+                    <button type="button" hx-post="{{ url_for('requests.get_feedback', request_id=request.id) }}">Запит відгука</button>
+                {% endif %}
+            </td>
+            <td>{{ request.feedback_1 }}</td>
+            <td>{{ request.feedback_2 }}</td>
+            <td>{{ request.feedback_3 }}</td>
+            <td>{{ request.feedback_4 }}</td>
+            <td>{{ request.feedback_5 }}</td>
+            <td>{{ request.feedback_6 }}</td>
+            <td>{{ request.feedback_7 }}</td>
+            <td>{{ request.feedback_8 }}</td>
+            <td>{{ request.feedback_9 }}</td>
+            <td>{{ request.feedback_10 }}</td>
         </tr>
         {% endfor %}
     </tbody>

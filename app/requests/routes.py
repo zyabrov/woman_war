@@ -157,3 +157,19 @@ def delete_request(request_id):
     r.delete()
     return redirect(url_for('requests.requests'))
 
+
+@bp.route('/get_feedback/<int:request_id>', methods=['POST'])
+def get_feedback(request_id):
+    r = Request.get(request_id)
+    if r:
+        from app.users.models import User
+        user = User.get(r.user_id)
+        if user:
+            from app.manychat.models import ManychatSendFlow
+            #send flow to the user
+            send_flow = ManychatSendFlow(r.user_id, 'feedback')
+            send_flow.post()
+           
+
+    
+

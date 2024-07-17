@@ -10,8 +10,8 @@ def new():
     print('/n/n----------------/n')
     print('request_data: ', request_data)
     manychat_request = ManychatRequest(request_data)
-    r = Request.get(manychat_request.id)
     from app.requests.models import Request
+    r = Request.get(manychat_request.id)
     questions = []
     for i in range(1, 11):
         questions.append(request_data['custom_fields'].get('Відгук - питання ' + str(i)))    

@@ -88,5 +88,23 @@ class Feedback(db.Model):
             question_10 = questions[9]
         )
     
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'request_id': self.request_id,
+            'specialist_id': self.specialist_id,
+            'question_1': self.question_1,
+            'question_2': self.question_2,
+            'question_3': self.question_3,
+            'question_4': self.question_4,
+            'question_5': self.question_5,
+            'question_6': self.question_6,
+            'question_7': self.question_7,
+            'question_8': self.question_8,
+            'question_9': self.question_9,
+            'question_10': self.question_10
+        }
+    
     
     

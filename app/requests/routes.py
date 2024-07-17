@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for, request
 
 @bp.route('/')
 def requests():
-    requests = Request.get_all()
+    requests = Request.query.all()
     return render_template('requests.html', requests=requests)
 
 @bp.route('/free', methods=['POST'])

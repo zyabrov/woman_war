@@ -169,6 +169,10 @@ def get_feedback(request_id):
             #send flow to the user
             send_flow = ManychatSendFlow(r.user_id, 'feedback')
             send_flow.post()
+
+            return {'status': '200'}
+
+    return {'status': '404'}
            
 
     

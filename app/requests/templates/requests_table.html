@@ -64,6 +64,8 @@
             <td>
                 {% if request.feedback %}
                     <a href="{{ url_for('feedbacks.feedback_card', feedback_id=request.feedback_id) }}">{{ request.feedback_id }}</a>
+                {% elif request.status == 'Запит відгуку відправлено' %}
+                    'Запит відгуку відправлено'
                 {% else %}
                     <button type="button" hx-post="{{ url_for('requests.get_feedback', request_id=request.id) }}">Запит відгука</button>
                 {% endif %}

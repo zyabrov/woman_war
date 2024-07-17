@@ -21,6 +21,7 @@ class Request(db.Model):
     tag = db.relationship("Tag", backref="requests")
     user_age = db.Column(db.Integer)
     request_name = db.Column(db.String(80))
+    status = db.Column(db.String(80), nullable=False, default="new")
     
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref="requests")
@@ -62,7 +63,8 @@ class Request(db.Model):
             user_id = user_id,
             request_type = request_type,
             user_age = user_age, 
-            request_name = request_name
+            request_name = request_name,
+            status = "new"
         )
         db.session.add(new_request)
         db.session.commit()
@@ -113,5 +115,8 @@ class Request(db.Model):
 
     def add_specialist(self, specialist_id):
         self.specialist_id = specialist_id
+        db.session.commit()
+
+    def save(self):
         db.session.commit()
         

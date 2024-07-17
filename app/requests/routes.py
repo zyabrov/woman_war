@@ -169,7 +169,9 @@ def get_feedback(request_id):
             #send flow to the user
             send_flow = ManychatSendFlow(r.user_id, 'content20240704084420_085880')
             send_flow.post()
-            return 'Запит відправлено'
+            r.status = 'Запит відгуку відправлено'
+            r.save()
+            return '✅'
 
     return {'status': '404'}
            

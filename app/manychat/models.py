@@ -132,6 +132,7 @@ class ManychatSendFlow:
     def __init__(self, subscriber_id, flow_name):
         self.subscriber_id = subscriber_id
         self.flow_ns = flow_name
+        self.url = 'https://api.manychat.com/fb/sending/sendFlow'
         self.json = self.to_json()
 
     def to_json(self):
@@ -141,7 +142,7 @@ class ManychatSendFlow:
         }
     
     def post(self):
-        r = requests.post(url, json=self.json, headers=headers)
+        r = requests.post(self.url, json=self.json, headers=headers)
         print(r.json())
         return r.json()
 

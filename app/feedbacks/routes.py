@@ -7,6 +7,13 @@ from flask import render_template, redirect, url_for, request
 def feedbacks():
     return "feedbacks"
 
+
+@bp.route('/<int:feedback_id>', methods=['GET', 'POST'])
+def feedback_card(feedback_id):
+    feedback = Feedback.get(feedback_id)
+    return render_template('feedback_card.html', feedback=feedback)
+
+
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
     from app.manychat.models import ManychatRequest
@@ -20,4 +27,6 @@ def new():
     for i in range(1, 11):
         questions.append(request_data['custom_fields'].get('Відгук - питання ' + str(i)))    
     feedback = Feedback.add_from_request(r, questions)
-    return {'status': '200', 'feedback_id': feedback.id}
+    r.status = 'Відгук отримано'
+    r.save()
+    return {'status': '200', 'feedback_id': feedback.id, 'request': r}

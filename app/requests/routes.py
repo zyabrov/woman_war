@@ -6,6 +6,10 @@ from flask import render_template, redirect, url_for, request
 @bp.route('/')
 def requests():
     requests = Request.query.all()
+    for request in requests:
+        if request.feedbacks:
+            for feedback in request.feedbacks:
+                print('request feedback: ', feedback)
     return render_template('requests.html', requests=requests)
 
 @bp.route('/free', methods=['POST'])

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>Відгук</title>
+<h1>Відгук</h1>
+
+
+    <table>
+        <tr>
+            <th>User ID</th>
+            <th>Request ID</th>
+            <th>Specialist ID</th>
+            <th>Question 1</th>
+            <th>Question 2</th>
+            <th>Question 3</th>
+            <th>Question 4</th>
+            <th>Question 5</th>
+            <th>Question 6</th>
+            <th>Question 7</th>
+            <th>Question 8</th>
+            <th>Question 9</th>
+            <th>Question 10</th>
+        </tr>
+        <tr>
+            <td>{{ feedback.user_id }}</td>
+            <td>{{ feedback.request_id }}</td>
+            <td>{{ feedback.specialist_id }}</td>
+            <td>{{ feedback.question_1 }}</td>
+            <td>{{ feedback.question_2 }}</td>
+            <td>{{ feedback.question_3 }}</td>
+            <td>{{ feedback.question_4 }}</td>
+            <td>{{ feedback.question_5 }}</td>
+            <td>{{ feedback.question_6 }}</td>
+            <td>{{ feedback.question_7 }}</td>
+            <td>{{ feedback.question_8 }}</td>
+            <td>{{ feedback.question_9 }}</td>
+            <td>{{ feedback.question_10 }}</td>
+        </tr>
+    </table>
+{% endblock %}

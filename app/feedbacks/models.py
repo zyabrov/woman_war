@@ -24,7 +24,7 @@ class Feedback(db.Model):
 
 
     def __repr__(self):
-        return f'{self.message}'
+        return f'Відгук до запиту {self.request_id}'
     
     @classmethod
     def get(cls, id):

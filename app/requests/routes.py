@@ -3,6 +3,11 @@ from app.requests.models import Request
 from flask import render_template, redirect, url_for, request
 
 
+@bp.route('/')
+def requests():
+    requests = Request.get_all()
+    return render_template('requests.html', requests=requests)
+
 @bp.route('/free', methods=['POST'])
 def free_request():
     from app.manychat.models import ManychatRequest

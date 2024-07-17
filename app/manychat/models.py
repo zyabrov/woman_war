@@ -143,6 +143,7 @@ class ManychatSendFlow:
     def post(self):
         r = requests.post(url, json=self.json, headers=headers)
         print(r.json())
+        return r.json()
 
 
 

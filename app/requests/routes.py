@@ -5,6 +5,8 @@ from flask import render_template, redirect, url_for, request
 
 @bp.route("/", methods=["GET", "POST"])
 def requests():
+    from app.extensions import db
+    db.create_all()
     return render_template("requests.html", requests = Request.query.all())
 
 

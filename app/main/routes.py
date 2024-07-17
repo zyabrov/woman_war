@@ -14,6 +14,11 @@ def create_tables():
     db.create_all()
     return 'tables_created'
 
+@bp.route('/new_tables', methods=['GET', 'POST'])
+def new_tables():
+    db.create_all()
+    return 'tables_created'
+
 
 @bp.route('/404', methods=['GET', 'POST'])
 def error():

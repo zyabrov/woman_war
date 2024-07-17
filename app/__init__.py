@@ -39,4 +39,6 @@ def create_app(config_class=Config):
     from app.feedbacks import bp as feedbacks_bp
     app.register_blueprint(feedbacks_bp)
 
+    db.create_all()
+
     return app  

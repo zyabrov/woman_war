@@ -1,6 +1,5 @@
 from app.extensions import db
 from datetime import datetime
-from app.requests.models import Request
 
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,7 +71,7 @@ class Feedback(db.Model):
 
 
     @classmethod
-    def add_from_request(cls, request: Request, questions: list):
+    def add_from_request(cls, request, questions: list):
         return cls.add(
             request_id = request.id,
             user_id = request.user_id,

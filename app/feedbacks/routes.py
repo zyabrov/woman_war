@@ -3,6 +3,10 @@ from app.feedbacks.models import Feedback
 from flask import render_template, redirect, url_for, request
 
 
+@bp.route('/', methods=['GET', 'POST'])
+def feedbacks():
+    return "feedbacks"
+
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
     from app.manychat.models import ManychatRequest

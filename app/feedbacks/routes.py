@@ -29,4 +29,4 @@ def new():
     feedback = Feedback.add_from_request(r, questions)
     r.status = 'Відгук отримано'
     r.save()
-    return {'status': '200', 'feedback_id': feedback.id, 'feedback_data': feedback.to_dict()}
+    return {'status': '200', 'feedback_id': feedback.id, 'feedback_data': feedback.to_dict(), 'request_id': r.id}

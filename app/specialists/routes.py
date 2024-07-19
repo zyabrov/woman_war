@@ -131,6 +131,7 @@ def find_request(request_id):
         else:
             print('specialists not found')
             error = 'Спеціалістів не знайдено'
+            return redirect(url_for('main.error'), error)
     else:
         print('request not found')
         error = 'Запит не знайдено'
@@ -156,10 +157,11 @@ def choose(request_id, specialist_id):
 
             if user:
                 print('user: ', user)  
+                
                 #message to the user
                 user_message = TextMessage(f'Ваш запит надісланий спеціалісту: {specialist.name}')
-                send_message = ManychatSendMessage(r.user.id, messages=[user_message.json])
-                send_message.post()
+                ManychatSendMessage(user.id, messages=[user_message.json]).post()
+                
 
                 # #message to the specialist
                 # user_telegram_username = r.user.username
@@ -179,13 +181,15 @@ def choose(request_id, specialist_id):
             else:
                 print('user not found')
                 error = 'Користувача не знайдено'
+                return redirect(url_for('main.error'), error)
         else:
             print('request not found')
             error = 'Запит не знайдено'
+            return redirect(url_for('main.error'), error)
     else:
         print('specialist not found')
         error = 'Спеціаліста не знідено'
-    return redirect(url_for('main.error'), error)
+        return redirect(url_for('main.error'), error)
 
 
 @bp.route('/form/update_selected_tags', methods=['POST'])

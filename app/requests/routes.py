@@ -81,13 +81,11 @@ def accept_request():
     #edit the group message
     message_id = int(r.message_id)
     message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
-    update_message = UpdateMessage(free_group_id, message_id, message_text)
-    update_message_response = update_message.post()
+    UpdateMessage(free_group_id, message_id, message_text).post()
 
     #message to the user
     user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
-    send_message = ManychatSendMessage(r.user_id, messages=[user_message.json])
-    send_message.post()
+    ManychatSendMessage(r.user_id, messages=[user_message.json]).post()
 
     #message to the specialist
     specialist_message = TextMessage(
@@ -100,8 +98,7 @@ def accept_request():
         Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
         Телефон: {r.user_phone}
         Як дізналися: {r.user_how_known}''')
-    send_message = ManychatSendMessage(specialist.id, messages=[specialist_message.json])
-    send_message.post()
+    ManychatSendMessage(specialist.id, messages=[specialist_message.json]).post()
 
     return {'status': '200', 'update_message_response': update_message_response}
 
@@ -134,18 +131,20 @@ def find_specialists_request():
                 return {'status': '200', 'specialists': specialists_number, 'message':'Знайдено спеціалістів: ' + str(specialists_number)}
             else:
                 message = 'Спеціалістів не знайдено'
+                return {'status': '404', 'specialists': 0, 'message': message}
             
         else:
             print('/n/n----------------/n')
             print('no request found')
             message = 'Запит не знайдено'
+            return {'status': '404', 'specialists': 0, 'message': message}
 
     else:
         print('/n/n----------------/n')
         print('no user found')
         message = 'Користувача не знайдено'
+        return {'status': '404', 'specialists': 0, 'message': message}
 
-    return {'status': '404', 'specialists': 0, 'message': message}
 
 
 @bp.route('/request_card/<int:request_id>', methods=['GET'])

@@ -4,6 +4,9 @@
 
 <h1>Запити</h1>
 
+<a href="{{ url_for('requests.generate_xls') }}" class="export-link">Export to Excel</a>
+
 {% include 'requests_table.html' %}
+
 
 {% endblock %}

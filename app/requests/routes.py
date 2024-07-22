@@ -1,14 +1,14 @@
 from app.requests import bp
 from app.requests.models import Request
-from flask import render_template, redirect, url_for, request
-
+from flask import render_template, redirect, url_for, request, send_file
+import xlsxwriter
 
 @bp.route('/')
 def requests():
     requests = Request.query.all()
-    for request in requests:
-        if request.feedbacks:
-            for feedback in request.feedbacks:
+    for r in requests:
+        if r.feedbacks:
+            for feedback in r.feedbacks:
                 print('request feedback: ', feedback)
     return render_template('requests.html', requests=requests)
 
@@ -179,5 +179,40 @@ def get_feedback(request_id):
     return {'status': '404'}
            
 
-    
+@bp.route('/generate_xls', methods=['GET', 'POST'])
+def generate_xls():
+    table_data = []  # Example table data
+
+    # Add data to the table
+    for r in Request.query.all():
+        row_data = {
+            'ID': r.id,
+            'Запит': r.request_name,
+            'Коли створений': r.created_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'Клієнт': r.user_full_name,
+            'Cпеціаліст': r.specialist.name if r.specialist else '',
+            'Вік': r.user_age,
+            'Де знаходиться': r.user_where_is,
+            'Місто': r.user_where_is_city,
+            'Досвід з психологом': r.user_worked_with_psychologist_before,
+            'Яку допомогу': r.help_type,
+            'Як дізналися': r.user_how_known,
+            'Телефон': r.user_phone,
+            'Тип запиту': r.request_type
+        }    
+        table_data.append(row_data)
+
+    # Generate XLS file using the table data
+    workbook = xlsxwriter.Workbook('app/static/requests.xlsx')
+    worksheet = workbook.add_worksheet()
+
+     # Write the data from table_data to the Excel file
+    for row_idx, row in enumerate(table_data):
+        for col_idx, value in enumerate(row.values()):
+            worksheet.write(row_idx, col_idx, value)
+
+    workbook.close()
+
+    # Send the XLS file back to the client for download
+    return send_file('static/requests.xlsx', as_attachment=True, download_name='requests.xlsx')
 

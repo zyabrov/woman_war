@@ -100,7 +100,7 @@ def accept_request():
         Як дізналися: {r.user_how_known}''')
     ManychatSendMessage(specialist.id, messages=[specialist_message.json]).post()
 
-    return {'status': '200', 'update_message_response': update_message_response}
+    return {'status': '200'}
 
 
 @bp.route('/new_find_specialists_request', methods=['POST'])

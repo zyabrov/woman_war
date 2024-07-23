@@ -174,7 +174,7 @@ def choose(request_id, specialist_id):
 
                 # message to the group
                 from app.telegram.models import SendMessage, paid_group_id
-                text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name} @{specialist.telegram_username}\n\nТег запиту: {r.tag}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: {r.user.username}'
+                text = f'Платний запит № {r.id}: {r.tag}. Спеціаліст: {specialist.name} @{specialist.telegram_username}\n\nТег запиту: {r.tag}\n\nВік: {r.user.age}\nДата народження: {r.user.birthdate}\nДе знаходиться: {r.user.where_is} - {r.user.where_is_city}\nПопереднй досвід з психологом: {r.user.worked_with_psychologist_before}\nЯк дізналися: {r.user.how_known}\n\nТелефон: {r.user.phone}\nЛогін Телеграм: @{r.user.username}'
                 SendMessage(paid_group_id, text).post()
                 return 'Запит надіслано'
             else:

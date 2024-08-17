@@ -5,11 +5,7 @@ import xlsxwriter
 
 @bp.route('/')
 def requests():
-    requests = Request.query.all()
-    for r in requests:
-        if r.feedbacks:
-            for feedback in r.feedbacks:
-                print('request feedback: ', feedback)
+    requests = Request.query.order_by(Request.id.desc()).all()
     return render_template('requests.html', requests=requests)
 
 @bp.route('/free', methods=['POST'])

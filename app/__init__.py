@@ -18,14 +18,12 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    from app.tags import bp as tags_bp
-    app.register_blueprint(tags_bp)
+    from app.users import bp as users_bp
+    app.register_blueprint(users_bp)
 
     from app.specialists import bp as specialists_bp
     app.register_blueprint(specialists_bp)
 
-    from app.users import bp as users_bp
-    app.register_blueprint(users_bp)
 
     from app.requests import bp as requests_bp
     app.register_blueprint(requests_bp)
@@ -39,4 +37,7 @@ def create_app(config_class=Config):
     from app.feedbacks import bp as feedbacks_bp
     app.register_blueprint(feedbacks_bp)
 
+    from app.tags import bp as tags_bp
+    app.register_blueprint(tags_bp)
+    
     return app  

@@ -10,6 +10,12 @@ specialist_tag = db.Table(
     db.Column("tag_id", db.Integer, db.ForeignKey("tag.id")),
 )
 
+specialist_user = db.Table(
+    "specialist_user",
+    db.Column("specialist_id", db.Integer, db.ForeignKey("specialist.id")),
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
+)
+
 
 class Specialist(db.Model):
     __tablename__ = "specialist"
@@ -18,11 +24,12 @@ class Specialist(db.Model):
     description = db.Column(db.String(255))
     cv = db.Column(db.String(255))
     phone = db.Column(db.String(255))
-    tags = db.relationship("Tag", secondary=specialist_tag, back_populates="specialists")
+    tags = db.relationship("Tag", secondary='specialist_tag', back_populates="specialists")
     telegram_username = db.Column(db.String(255))
     manychat_username = db.Column(db.String(255))
     cost = db.Column(db.Integer)
     manychat_img = db.Column(db.String(255))
+    users = db.relationship("User", secondary='specialist_user', back_populates="specialists")
 
 
     def __repr__(self) -> str:

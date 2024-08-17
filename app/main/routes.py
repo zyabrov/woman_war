@@ -6,7 +6,7 @@ from app.extensions import db
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
-    return 'This is dashboard'
+    return render_template('main.html')
 
 @bp.route('/create_tables', methods=['GET', 'POST'])
 def create_tables():

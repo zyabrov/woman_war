@@ -16,6 +16,8 @@ class User(db.Model):
     how_known = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer)
 
+    specialists = db.relationship("Specialist", secondary="specialist_user", back_populates="users")
+
     def __init__(self, id=None, name=None, username=None, telegram_id=None, birthdate=None, where_is=None, where_is_city=None, worked_with_psychologist_before=None, phone=None, how_known=None, age=None):
         self.id = id
         self.name = name

@@ -5,8 +5,8 @@ from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    username = db.Column(db.String(80), unique=True)
+    name = db.Column(db.String(80), unique=False, nullable=False)
+    username = db.Column(db.String(80), unique=False)
     telegram_id = db.Column(db.Integer, unique=True)
     birthdate = db.Column(db.Date, nullable=False)
     where_is = db.Column(db.String(80), nullable=False)

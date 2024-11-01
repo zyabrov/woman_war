@@ -19,6 +19,7 @@ def free_request():
     r = Request.add(manychat_request)
     if r:
         print('new free request: ', r)
+        r.save_message_id(manychat_request.message_id)
         return {'status': '200', 'id': r.id}
     else:
         return {'status': '404'}

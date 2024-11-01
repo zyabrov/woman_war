@@ -16,10 +16,10 @@ def free_request():
     user = User.get_and_update_or_create_from_request(manychat_request)
     print('\n\n----------------\n')
     print('free request user: ', user)
-    r = Request.add_from_request(manychat_request)
-    print('new free request: ', r)
+    r = Request.add(manychat_request)
     if r:
-        return {'status': '200', 'user_age': r.user_age}
+        print('new free request: ', r)
+        return {'status': '200', 'id': r.id}
     else:
         return {'status': '404'}
 
@@ -47,8 +47,8 @@ def save_message_id():
         return {'status': '404'}
 
 
-@bp.route('/accept', methods=['POST'])
-def accept_request():
+@bp.route('/accept/<int: request_id>', methods=['POST'])
+def accept_request(request_id):
     from app.manychat.models import ManychatRequest
     from app.telegram.models import UpdateMessage, free_group_id
     from app.specialists.models import Specialist
@@ -87,13 +87,12 @@ def accept_request():
     specialist_message = TextMessage(
         f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
 
+        Тип запиту: {r.request_type}
         Запит:{r.request_name}
         Вік: {r.user_age}
-        Дата народження: {r.user_birthdate}
-        Де знаходиться: {r.user_where_is} - {r.user_where_is_city}
-        Попереднй досвід з психологом: {r.user_worked_with_psychologist_before}
+        _____
         Телефон: {r.user_phone}
-        Як дізналися: {r.user_how_known}''')
+        ''')
     ManychatSendMessage(specialist.id, messages=[specialist_message.json]).post()
 
     return {'status': '200'}

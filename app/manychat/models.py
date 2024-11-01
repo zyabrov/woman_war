@@ -24,6 +24,8 @@ class ManychatRequest():
         self.message_id = request['custom_fields'].get('request_message_id')
         self.user_request_id = request['custom_fields'].get('підтвердження_запиту_id', None)
         self.manychat_img = request['profile_pic']
+        self.user_age = request['custom_fields'].get('опитування_вік')
+        self.user_request_id = request['custom_fields'].get('')
         print('ManychatRequest', request)
     
     def get_request_tag(self):

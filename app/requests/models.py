@@ -9,13 +9,13 @@ class Request(db.Model):
     user_full_name = db.Column(db.String(80), nullable=False)
     user_username = db.Column(db.String(80))
     user_telegram_id = db.Column(db.Integer)
-    user_birthdate = db.Column(db.Date, nullable=False)
-    user_where_is = db.Column(db.String(80), nullable=False)
-    user_where_is_city = db.Column(db.String(80), nullable=False)
-    user_worked_with_psychologist_before = db.Column(db.String(80), nullable=False)
+    user_birthdate = db.Column(db.Date)
+    user_where_is = db.Column(db.String(80))
+    user_where_is_city = db.Column(db.String(80))
+    user_worked_with_psychologist_before = db.Column(db.String(80))
     help_type = db.Column(db.String(80), nullable=False)
-    user_how_known = db.Column(db.String(80), nullable=False)
-    user_phone = db.Column(db.Integer, nullable=False)
+    user_how_known = db.Column(db.String(80))
+    user_phone = db.Column(db.Integer)
     request_type = db.Column(db.String(80), nullable=False)
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=True)
     tag = db.relationship("Tag", backref="requests")
@@ -44,26 +44,26 @@ class Request(db.Model):
 
 
     @classmethod
-    def add(cls, id, user_id, tag_id, user_full_name, user_username, user_telegram_id, user_birthdate, user_where_is, user_where_is_city, user_worked_with_psychologist_before, help_type, user_how_known, user_phone, request_type, request_name):
-        user_age = (datetime.now().date() - datetime.strptime(user_birthdate, "%Y-%m-%d").date()).days // 365
+    def add(cls, manychat_request: ManychatRequest):
+        # user_/age = (datetime.now().date() - datetime.strptime(user_birthdate, "%Y-%m-%d").date()).days // 365
         new_request = cls(
-            id = id,
+            id = manychat_request.id,
             created_date = datetime.now(),
-            user_full_name = user_full_name,
-            user_username = user_username,
-            user_telegram_id = user_telegram_id,
-            user_birthdate = datetime.strptime(user_birthdate, "%Y-%m-%d").date(), #user_birthdate,
-            user_where_is = user_where_is,
-            user_where_is_city = user_where_is_city,
-            user_worked_with_psychologist_before = user_worked_with_psychologist_before,
-            help_type = help_type,
-            user_how_known = user_how_known,
-            user_phone = user_phone,
-            tag_id = tag_id,
-            user_id = user_id,
-            request_type = request_type,
-            user_age = user_age, 
-            request_name = request_name,
+            user_full_name = manychat_request.user_full_name,
+            user_username = manychat_request.user_username,
+            user_telegram_id = manychat_request.user_telegram_id,
+            # user_birthdate = datetime.strptime(user_birthdate, "%Y-%m-%d").date(), #user_birthdate,
+            user_where_is = manychat_request.user_where_is,
+            user_where_is_city = manychat_request.user_where_is_city,
+            user_worked_with_psychologist_before = manychat_request.user_worked_with_psychologist_before,
+            help_type = manychat_request.help_type,
+            user_how_known = manychat_request.user_how_known,
+            user_phone = manychat_request.user_phone,
+            tag_id = manychat_request.tag_id,
+            user_id = manychat_request.user_id,
+            request_type = manychat_request.request_type,
+            user_age = manychat_request.user_age, 
+            request_name = manychat_request.tag_name,
             status = "new"
         )
         db.session.add(new_request)

@@ -48,8 +48,8 @@ def save_message_id():
         return {'status': '404'}
 
 
-@bp.route('/accept/<int: request_id>', methods=['POST'])
-def accept_request(request_id):
+@bp.route('/accept', methods=['POST'])
+def accept_request():
     from app.manychat.models import ManychatRequest
     from app.telegram.models import UpdateMessage, free_group_id
     from app.specialists.models import Specialist

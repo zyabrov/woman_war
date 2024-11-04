@@ -36,10 +36,8 @@ class User(db.Model):
         return '%r' % self.name
     
     @classmethod
-    def add_user(cls, id, name, username, telegram_id, birthdate:str, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
-        birthdate = datetime.strptime(birthdate, "%Y-%m-%d")
-        age = age_calc(birthdate)
-        user = cls(id, name, username, telegram_id, birthdate, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age)
+    def add_user(cls, id, name, username, telegram_id, age, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
+        user = cls(id, name, username, telegram_id, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age)
         db.session.add(user)
         db.session.commit()
         return user

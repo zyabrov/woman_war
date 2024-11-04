@@ -57,9 +57,9 @@ def accept_request():
     
     manychat_request = ManychatRequest(request.get_json())
     specialist = Specialist.get(manychat_request.user_id)
+    print('user request id: ', manychat_request.user_request_id)
     print('\n\n----------------\n')
     print('specialist: ', specialist)
-    print('user request id: ', manychat_request.user_request_id)
     if not specialist:
         specialist = Specialist.add(
             name=manychat_request.manychat_username, 

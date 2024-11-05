@@ -88,7 +88,6 @@ def accept_request():
     specialist_message = TextMessage(
         f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
 
-        Тип запиту: {r.request_type}
         Запит:{r.request_name}
         Вік: {r.user_age}
         _____

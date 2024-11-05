@@ -61,7 +61,7 @@ class Request(db.Model):
             user_phone = manychat_request.phone,
             # tag_id = manychat_request.tag_id,
             user_id = manychat_request.user_id,
-            # request_type = manychat_request.request_type,
+            request_type = 'Безкоштовний',
             user_age = manychat_request.user_age, 
             request_name = manychat_request.tag_name,
             status = "new"

@@ -57,7 +57,6 @@ class User(db.Model):
             self.worked_with_psychologist_before = worked_with_psychologist_before
         if phone:
             self.phone = phone
-        self.age = datetime.now().year - self.birthdate.year
         db.session.commit()
 
     @classmethod

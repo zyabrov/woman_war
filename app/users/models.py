@@ -36,18 +36,31 @@ class User(db.Model):
         return '%r' % self.name
     
     @classmethod
-    def add_user(cls, id, name, username, telegram_id, age, where_is, where_is_city, worked_with_psychologist_before, phone, how_known):
-        user = cls(id, name, username, telegram_id, where_is, where_is_city, worked_with_psychologist_before, phone, how_known, age)
+    def add_user(cls, id, name, username, telegram_id, age, phone, where_is=None, where_is_city=None, worked_with_psychologist_before=None, how_known=None):
+        user = cls(
+            id=id,
+            name=name,
+            username=username,
+            telegram_id=telegram_id,
+            age=age,
+            phone=phone,
+            where_is=where_is,
+            where_is_city=where_is_city,
+            worked_with_psychologist_before=worked_with_psychologist_before,
+            how_known=how_known
+        )
         db.session.add(user)
         db.session.commit()
         return user
     
 
-    def update_user(self, name=None, username=None, where_is=None, where_is_city=None, worked_with_psychologist_before=None, phone=None):
+    def update_user(self, name=None, username=None, age=None, where_is=None, where_is_city=None, worked_with_psychologist_before=None, phone=None, how_known=None):
         if name:
             self.name = name
         if username:
             self.username = username
+        if age:
+            self.age = age
 
         if where_is:
             self.where_is = where_is
@@ -69,16 +82,12 @@ class User(db.Model):
         user = cls.get(request.user_id)
         if not user:
             user = cls.add_user(
-                request.user_id,
-                request.full_name,
-                request.username,
-                request.telegram_id,
-                request.birthdate,
-                request.where_is,
-                request.where_is_city,
-                request.worked_with_psychologist_before,
-                request.phone,
-                request.how_known
+                id=request.user_id,
+                name=request.full_name,
+                username=request.username,
+                telegram_id=request.telegram_id,
+                age=request.user_age,
+                phone=request.phone,
             )
             print('/n/n----------------/n')
             print('new user added: ', user)
@@ -88,9 +97,7 @@ class User(db.Model):
             user.update_user(
                 name=request.full_name,
                 username=request.username,
-                where_is=request.where_is,
-                where_is_city = request.where_is_city,
-                worked_with_psychologist_before=request.worked_with_psychologist_before,
+                age=request.user_age,
                 phone=request.phone)
             print('user: ', user)
         return user

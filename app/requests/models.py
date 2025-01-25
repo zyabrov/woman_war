@@ -64,7 +64,8 @@ class Request(db.Model):
             request_type = 'Безкоштовний',
             user_age = manychat_request.user_age, 
             request_name = manychat_request.tag_name,
-            status = "new"
+            status = "new",
+            pcychiatry = manychat_request.pcychiatry
         )
         db.session.add(new_request)
         db.session.commit()
@@ -94,7 +95,8 @@ class Request(db.Model):
             user_how_known = request.how_known,
             user_phone = request.phone,
             request_type = 'Безкоштовний',
-            request_name = request.tag_name
+            request_name = request.tag_name,
+            pcychatry = request.pcychiatry
         )
 
     

@@ -92,8 +92,7 @@ class User(db.Model):
                 username=request.username,
                 telegram_id=request.telegram_id,
                 age=request.user_age,
-                phone=request.phone,
-                pcychiatry=request.pcychiatry
+                phone=request.phone
             )
             print('/n/n----------------/n')
             print('new user added: ', user)
@@ -104,8 +103,7 @@ class User(db.Model):
                 name=request.full_name,
                 username=request.username,
                 age=request.user_age,
-                phone=request.phone,
-                pcychiatry=request.pcychiatry
+                phone=request.phone
                 )
             print('user: ', user)
         return user

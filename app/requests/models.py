@@ -22,6 +22,7 @@ class Request(db.Model):
     user_age = db.Column(db.Integer)
     request_name = db.Column(db.String(80))
     status = db.Column(db.String(80), nullable=False, default="new")
+    pcychiatry = db.Column(db.String(80))
     
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref="requests")

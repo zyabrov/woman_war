@@ -98,8 +98,6 @@ def edit_specialist(specialist_id):
         image_input = None
         if specialist.manychat_img:
             image_input = specialist.manychat_img
-        else:
-            image_imput = None
         form = NewSpecialistForm(
             name_input = specialist.name,
             description_input = specialist.description,

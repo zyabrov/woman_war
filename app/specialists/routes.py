@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from app.specialists import bp
 from app.specialists.models import Specialist
-from app.specialists.forms import NewSpecialistForm
+from app.specialists.forms import NewSpecialistForm, EditSpecialistForm
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -98,14 +98,9 @@ def edit_specialist(specialist_id):
         image_input = None
         if specialist.manychat_img:
             image_input = specialist.manychat_img
-        form = NewSpecialistForm(
-            name_input = specialist.name,
-            description_input = specialist.description,
-            cv_input = specialist.cv,
-            image_input = image_input,
-            tags_select = [tag.id for tag in specialist.tags],
-            cost_input = specialist.cost, 
-            tg_username = specialist.telegram_username
+        form = EditSpecialistForm(
+            name_input=specialist.name,
+            tg_username_input=specialist.telegram_username,
         )
     
         if form.validate_on_submit():

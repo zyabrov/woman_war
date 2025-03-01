@@ -21,3 +21,10 @@ class NewSpecialistForm(FlaskForm):
         super().__init__(*args, **kwargs)
         from app.tags.models import Tag
         self.tags_select.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+
+
+class EditSpecialistForm(FlaskForm):
+    name_input = StringField("Ім'я", id='name_input', validators=[InputRequired()])
+    tg_username = StringField("Telegram username", id='tg_username', validators=[])
+    submit = SubmitField("Зберегти")
+    id = HiddenField()

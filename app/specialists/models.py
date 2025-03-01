@@ -1,6 +1,6 @@
 from app.extensions import db
 from app.tags.models import Tag
-from app.specialists.forms import NewSpecialistForm
+from app.specialists.forms import NewSpecialistForm, EditSpecialistForm
 from app.requests.models import Request
 
 
@@ -84,13 +84,9 @@ class Specialist(db.Model):
         return new_specialist
     
 
-    def edit(self, form: NewSpecialistForm):
+    def edit(self, form: EditSpecialistForm):
         self.name = form.name_input.data
-        self.description = form.description_input.data
-        self.cv = form.cv_input.data
-        self.id = form.id_input.data
-        self.tags = [Tag.get_by_name(tag_name) for tag_name in form.tags_select.data]
-        cost = form.cost_input.data
+        self.telegram_username = form.tg_username.data
         db.session.commit()
 
 

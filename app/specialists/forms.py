@@ -10,12 +10,8 @@ class NewSpecialistForm(FlaskForm):
     image_input = StringField("URL зображення", id='image_input', validators=[])
     cv_input = StringField("URL резюме", id='cv_input', validators=[])
     tags_select = SelectMultipleField("Теги", id='tags_select', choices=[], validators=[DataRequired()])
-    # , render_kw={
-    #     'hx-trigger': "change", 
-    #     'hx-post': "/specialists/form/update_selected_tags",
-    #     'hx-target': "#tags_selected_list",
-    #     })
     cost_input = IntegerField("Вартість години консультації", id='cost_input', validators=[InputRequired()])
+    tg_username = StringField("Telegram username", id='tg_username', validators=[])
     submit = SubmitField("Створити спеціаліста")
 
     # tags_selected_list = FieldList(tags_select, id='tags_selected_list')

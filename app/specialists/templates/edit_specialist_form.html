@@ -1,0 +1,20 @@
+<form method="POST" action="{{ url_for('specialists.new_specialist') }}" style="max-width: 640px;">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+    {{ form.name_input.label }}<br> {{ form.name_input }}
+    {% if form.name_input.errors %}
+        {{ form.name_input.errors }}
+    {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.tg_username.label }}<br> {{ form.tg_username }}
+        {% if form.tg_username.errors %}
+            {{ form.tg_username.errors }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+    {{ form.submit() }}
+    </div>
+</form>

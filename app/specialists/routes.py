@@ -104,7 +104,8 @@ def edit_specialist(specialist_id):
             cv_input = specialist.cv,
             image_input = image_input,
             tags_select = [tag.id for tag in specialist.tags],
-            cost_input = specialist.cost
+            cost_input = specialist.cost, 
+            tg_username = specialist.telegram_username
         )
     
         if form.validate_on_submit():

@@ -126,7 +126,7 @@ class ManychatSendMessage():
     
 
     def post(self):
-        r = requests.post(url, json=self.json, headers=headers)
+        r = requests.post(url, json=self.json, headers=headers, proxies=None)
         print(r.json())
 
 

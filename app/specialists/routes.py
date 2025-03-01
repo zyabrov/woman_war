@@ -95,11 +95,16 @@ def new_specialist_free():
 def edit_specialist(specialist_id):
     specialist = Specialist.get(specialist_id)
     if specialist:
+        image_input = None
+        if specialist.manychat_img:
+            image_input = specialist.manychat_img
+        else:
+            image_imput = None
         form = NewSpecialistForm(
             name_input = specialist.name,
             description_input = specialist.description,
             cv_input = specialist.cv,
-            image_input = specialist.image,
+            image_input = image_input,
             tags_select = [tag.id for tag in specialist.tags],
             cost_input = specialist.cost
         )

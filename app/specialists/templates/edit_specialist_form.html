@@ -1,4 +1,4 @@
-<form method="POST" action="{{ url_for('specialists.edit_specialist, specialist_id=specialist.id') }}" style="max-width: 640px;">
+<form method="POST" action="{{ url_for('specialists.update_specialist') }}" class="form-container">
     {{ form.csrf_token }}
     {{ form.hidden_tag() }}
     
@@ -6,6 +6,18 @@
     {{ form.name_input.label }}<br> {{ form.name_input }}
     {% if form.name_input.errors %}
         {{ form.name_input.errors }}
+    {% endif %}
+    </div>
+    <div class="form-group">
+    {{ form.description_input.label }}<br> {{ form.description_input }}
+    {% if form.description_input.errors %}
+        {{ form.description_input.errors }}
+    {% endif %}
+    </div>
+    <div class="form-group">
+    {{ form.phone.label }}<br> {{ form.phone }}
+    {% if form.phone.errors %}
+        {{ form.phone.errors }}
     {% endif %}
     </div>
     <div class="form-group">

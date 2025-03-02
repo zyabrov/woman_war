@@ -95,18 +95,23 @@ def new_specialist_free():
 def edit_specialist(specialist_id):
     specialist = Specialist.get(specialist_id)
     if specialist:
-        image_input = None
-        if specialist.manychat_img:
-            image_input = specialist.manychat_img
         form = EditSpecialistForm(
             name_input=specialist.name,
             tg_username_input=specialist.telegram_username,
+            description_input=specialist.description,
+            phone=specialist.phone,
+            id=specialist.id
         )
-    
-        if form.validate_on_submit():
-            specialist.edit(form)
-            return render_template('specialists.html', specialists=Specialist.query.all())
         return render_template('edit_specialist.html', form=form, specialist=specialist)
+    
+
+@bp.route('/update_specialist', methods=['POST'])
+def update_specialist():
+    form = EditSpecialistForm(request.form)
+    specialist = Specialist.get(form.id.data)
+    if specialist:
+        specialist.update(form)
+    return redirect(url_for('specialists.specialists'))
     
 
 @bp.route('/delete_specialist/<int:specialist_id>', methods=['GET', 'POST'])

@@ -94,6 +94,13 @@ class Specialist(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def update(self, form: EditSpecialistForm):
+        self.name = form.name_input.data
+        self.telegram_username = form.tg_username.data
+        self.description = form.description_input.data
+        self.phone = form.phone.data
+        db.session.commit()
+
 
     @classmethod
     def find_by_request_id(cls, request_id):

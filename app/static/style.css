@@ -16,3 +16,7 @@ th, td {
     margin-top: 20px;
     text-align: center;
 }
+
+.form-container {
+    max-width: 640px;
+}

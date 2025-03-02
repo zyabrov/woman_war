@@ -6,7 +6,7 @@ from wtforms.validators import InputRequired, URL, DataRequired
 class NewSpecialistForm(FlaskForm):
     name_input = StringField("Ім'я", id='name_input', validators=[InputRequired()])
     manychat_username_input = StringField("ManyChat username", id='manychat_username_input', validators=[])
-    description_input = TextAreaField("Опис", id='description_input', validators=[InputRequired()])
+    description_input = TextAreaField("Опис", id='description_input')
     image_input = StringField("URL зображення", id='image_input', validators=[])
     cv_input = StringField("URL резюме", id='cv_input', validators=[])
     tags_select = SelectMultipleField("Теги", id='tags_select', choices=[], validators=[DataRequired()])
@@ -25,6 +25,8 @@ class NewSpecialistForm(FlaskForm):
 
 class EditSpecialistForm(FlaskForm):
     name_input = StringField("Ім'я", id='name_input', validators=[InputRequired()])
+    description_input = TextAreaField("Опис", id='description_input')
     tg_username = StringField("Telegram username", id='tg_username', validators=[])
+    phone = StringField("Телефон", id='phone', validators=[])
     submit = SubmitField("Зберегти")
     id = HiddenField()

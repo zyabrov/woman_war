@@ -97,7 +97,7 @@ def edit_specialist(specialist_id):
     if specialist:
         form = EditSpecialistForm(
             name_input=specialist.name,
-            tg_username_input=specialist.telegram_username,
+            tg_username=specialist.telegram_username,
             description_input=specialist.description,
             phone=specialist.phone,
             id=specialist.id

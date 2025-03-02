@@ -57,44 +57,41 @@ def accept_request():
     
     manychat_request = ManychatRequest(request.get_json())
     specialist = Specialist.get(manychat_request.user_id)
-    print('user request id: ', manychat_request.user_request_id)
-    print('\n\n----------------\n')
-    print('specialist: ', specialist)
-    if not specialist:
-        specialist = Specialist.add(
-            name=manychat_request.manychat_username, 
-            manychat_id=manychat_request.user_id,
-            manychat_username=manychat_request.manychat_username,
-            telegram_username=manychat_request.username,
-            phone=manychat_request.phone,
-            manychat_img=manychat_request.manychat_img
-        )
-        print('new specialist: ', specialist)
+    if specialist:
+        print('\n\n----------------\n')
+        print('user request id: ', manychat_request.user_request_id)
+        print('specialist: ', specialist)
+        r = Request.get(int(manychat_request.user_request_id))
+        if r:
+            print('request:', r)
+            r.add_specialist(specialist.id)
 
-    r = Request.get(int(manychat_request.user_request_id))
-    print('request:', r)
-    r.add_specialist(specialist.id)
+            #edit the group message
+            message_id = int(r.message_id)
+            message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
+            UpdateMessage(free_group_id, message_id, message_text).post()
 
-    #edit the group message
-    message_id = int(r.message_id)
-    message_text = f'Запит {r.id} прийняв спеціаліст @{specialist.telegram_username}'
-    UpdateMessage(free_group_id, message_id, message_text).post()
+            #message to the user
+            user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
+            ManychatSendMessage(r.user_id, messages=[user_message.json]).post()
 
-    #message to the user
-    user_message = TextMessage(f'Ваш запит прийняв спеціаліст: {specialist.name} @{specialist.telegram_username}')
-    ManychatSendMessage(r.user_id, messages=[user_message.json]).post()
+            #message to the specialist
+            specialist_message = TextMessage(
+                f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
 
-    #message to the specialist
-    specialist_message = TextMessage(
-        f'''Запит {r.id} від {r.user_full_name} (@{r.user_username}) прийнятий. 
+                Запит:{r.request_name}
+                Вік: {r.user_age}
+                _____
+                Телефон: {r.user_phone}
+                ''')
+            ManychatSendMessage(specialist.id, messages=[specialist_message.json]).post()
 
-        Запит:{r.request_name}
-        Вік: {r.user_age}
-        _____
-        Телефон: {r.user_phone}
-        ''')
-    ManychatSendMessage(specialist.id, messages=[specialist_message.json]).post()
+        else:
+            print('request not found')
+    else:
+        print('specialist not found')
 
+        
     return {'status': '200'}
 
 

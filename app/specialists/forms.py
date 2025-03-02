@@ -30,3 +30,7 @@ class EditSpecialistForm(FlaskForm):
     phone = StringField("Телефон", id='phone', validators=[])
     submit = SubmitField("Зберегти")
     id = HiddenField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        

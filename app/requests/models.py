@@ -112,8 +112,9 @@ class Request(db.Model):
 
     
     def save_message_id(self, message_id):
-        self.message_id = int(message_id)
-        db.session.commit()
+        if message_id is not None:
+            self.message_id = int(message_id)
+            db.session.commit()
 
 
     def add_specialist(self, specialist_id):

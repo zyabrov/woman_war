@@ -17,7 +17,8 @@ def free_request():
     if user:
         r = Request.add(manychat_request)
         if r:
-            r.save_message_id(manychat_request.message_id)
+            if manychat_request.message_id is not None:
+                r.save_message_id(manychat_request.message_id)
             return {'status': '200', 'id': r.id}
         else:
             return {'status': '405'}

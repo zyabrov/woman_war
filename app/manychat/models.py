@@ -17,11 +17,11 @@ class ManychatRequest():
         self.worked_with_psychologist_before = request['custom_fields']['запит_досвід_з_психологом']
         self.help_type = request['custom_fields']['опитування_яку_допомогу']
         self.how_known = request['custom_fields']['запит_як_дізналися']
-        self.phone = request['phone']
+        self.phone = request.get('phone', None)
         self.group_name = request['custom_fields'].get('запит_група', None)
         self.request_type = request['custom_fields']['тип_запиту']
         self.manychat_username = request['name']
-        self.message_id = request['custom_fields'].get('request_message_id')
+        self.message_id = request['custom_fields'].get('request_message_id', None)
         self.user_request_id = request['custom_fields'].get('підтвердження_запиту_id', None)
         self.manychat_img = request['profile_pic']
         self.user_age = request['custom_fields'].get('опитування_вік')

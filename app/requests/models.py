@@ -15,7 +15,7 @@ class Request(db.Model):
     user_worked_with_psychologist_before = db.Column(db.String(80))
     help_type = db.Column(db.String(80), nullable=False)
     user_how_known = db.Column(db.String(80))
-    user_phone = db.Column(db.Integer)
+    user_phone = db.Column(db.String(80))
     request_type = db.Column(db.String(80), nullable=False)
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), nullable=True)
     tag = db.relationship("Tag", backref="requests")

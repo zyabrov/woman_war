@@ -14,14 +14,15 @@ def free_request():
     from app.users.models import User
     manychat_request = ManychatRequest(request.get_json())
     user = User.get_and_update_or_create_from_request(manychat_request)
-    print('\n\n----------------\n')
-    print('free request user: ', user)
-    r = Request.add(manychat_request)
-    if r:
-        print('new free request: ', r)
-        r.save_message_id(manychat_request.message_id)
-        return {'status': '200', 'id': r.id}
+    if user:
+        r = Request.add(manychat_request)
+        if r:
+            r.save_message_id(manychat_request.message_id)
+            return {'status': '200', 'id': r.id}
+        else:
+            return {'status': '405'}
     else:
+
         return {'status': '404'}
 
 

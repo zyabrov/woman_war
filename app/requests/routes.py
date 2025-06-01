@@ -15,11 +15,14 @@ def free_request():
     manychat_request = ManychatRequest(request.get_json())
     user = User.get_and_update_or_create_from_request(manychat_request)
     if user:
-        r = Request.add(manychat_request)
-        if r:
-            if manychat_request.message_id is not None:
-                r.save_message_id(manychat_request.message_id)
-            return {'status': '200', 'id': r.id}
+        if manychat_request.id is not None:
+            r = Request.add(manychat_request)
+            if r:
+                if manychat_request.message_id is not None:
+                    r.save_message_id(manychat_request.message_id)
+                return {'status': '200', 'id': r.id}
+            else:
+                return {'status': '205'}
         else:
             return {'status': '405'}
     else:

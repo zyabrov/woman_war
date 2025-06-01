@@ -15,7 +15,7 @@ def free_request():
     manychat_request = ManychatRequest(request.get_json())
     user = User.get_and_update_or_create_from_request(manychat_request)
     if user:
-        if manychat_request.id is not None:
+        if manychat_request.id is not None and Request.get(manychat_request.id) is None:
             r = Request.add(manychat_request)
             if r:
                 if manychat_request.message_id is not None:

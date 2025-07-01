@@ -1,5 +1,6 @@
 from flask import request    
 import requests
+from config import Config
 
 
 
@@ -58,7 +59,7 @@ class TextMessage:
 
 
 url = 'https://api.manychat.com/fb/sending/sendContent'
-API_TOKEN = '539030:b5bb217ba67cc15f9059df99e175a204'
+API_TOKEN = Config.MANYCHAT_TOKEN
 headers = {
     'Authorization': 'Bearer ' + API_TOKEN,
     'Accept': 'application/json'

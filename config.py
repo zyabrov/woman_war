@@ -12,3 +12,4 @@ class Config:
     LOG_LEVEL = logging.DEBUG
     SERVER_URL = 'https://ziabrov.pythonanywhere.com/'
     BOT_TOKEN = '5976923303:AAFjzYS3l3DXCfPORmYw5rIh58DbC9C7VXM'
+    MANYCHAT_TOKEN = '539030:10f2de6d5f7b21d7587d0e44fcfae370'

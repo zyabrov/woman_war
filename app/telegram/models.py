@@ -1,6 +1,8 @@
 import requests
+from config import Config
 
-BOT_TOKEN = '5976923303:AAFlyJjx7QAjWlKNlxDENLAHlmW2T1eAoUE'
+
+BOT_TOKEN = Config.BOT_TOKEN
 headers = {
         "Content-Type": "application/json",
         "charset": "utf-8"

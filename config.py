@@ -11,3 +11,4 @@ class Config:
     SQLALCHEMY_ECHO = False
     LOG_LEVEL = logging.DEBUG
     SERVER_URL = 'https://ziabrov.pythonanywhere.com/'
+    BOT_TOKEN = '5976923303:AAFjzYS3l3DXCfPORmYw5rIh58DbC9C7VXM'

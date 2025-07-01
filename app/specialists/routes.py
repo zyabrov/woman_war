@@ -86,8 +86,8 @@ def new_specialist_free():
             return {'status': '500', 'message': message}
     else:
         print('/n/n----------------/n')
-        print('specialist already exist')
-        message = 'Specialist already exist'
+        print('specialist already exists')
+        message = 'Specialist already exists'
         return {'status': '200', 'message': message}
 
 
